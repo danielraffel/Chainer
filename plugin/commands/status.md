@@ -1,20 +1,27 @@
 ---
 skill_name: status
-description: Show running chains
+description: Show running and completed chains
 ---
 
-# Chainer: Show Running Chains
+# Chainer: Chain Status
 
-Display status of currently running chains.
+Display currently running chains and recently completed chains.
 
-## Step 1: Check for State File
+## Step 1: Read State File
 
-Look for `.claude/chainer-state.json` in the current directory.
+Check for the chainer state file at `.claude/chainer-state.json`.
+
+If the file doesn't exist, display:
+```
+No chains have been run yet.
+
+Use /chainer:list to see available chains
+Use /chainer:run <chain-name> to execute a chain
+```
 
 ## Step 2: Parse State
 
-If state file exists, parse the JSON to get running chains:
-
+The state file format:
 ```json
 {
   "running_chains": [
@@ -24,60 +31,89 @@ If state file exists, parse the JSON to get running chains:
       "cwd": "~/worktrees/oauth",
       "current_step": 2,
       "total_steps": 2,
+      "step_name": "implement",
       "pid": 12345
+    }
+  ],
+  "completed_chains": [
+    {
+      "chain": "plan-only",
+      "started": "2025-01-05T09:00:00Z",
+      "completed": "2025-01-05T09:15:00Z",
+      "cwd": "~/worktrees/billing",
+      "success": true
     }
   ]
 }
 ```
 
-## Step 3: Display Status
+## Step 3: Check Process Status
 
-Format the output:
+For each running chain:
+1. Check if the process (PID) is still alive using `ps -p <pid>`
+2. If not alive, move it to completed_chains with success=false
+3. Update the state file
+
+## Step 4: Display Status
+
+Format output like this:
 
 ```
 ┌─────────────────────────────────────────┐
 │ Chainer Status                          │
 ├─────────────────────────────────────────┤
+│ Running Chains (1)                      │
+│                                         │
 │ 🔄 plan-and-implement (oauth)           │
 │    Step 2/2: implement                  │
 │    Directory: ~/worktrees/oauth         │
 │    Running: 10 min                      │
+│    PID: 12345                           │
+├─────────────────────────────────────────┤
+│ Recently Completed (3)                  │
 │                                         │
 │ ✅ plan-only (billing)                  │
 │    Completed 5 min ago                  │
+│    Duration: 15 min                     │
 │    Directory: ~/worktrees/billing       │
+│                                         │
+│ ✅ implement-only (payments)            │
+│    Completed 1 hour ago                 │
+│    Duration: 45 min                     │
+│    Directory: ~/worktrees/payments      │
+│                                         │
+│ ❌ plan-and-implement (subscriptions)   │
+│    Failed 2 hours ago                   │
+│    Duration: 30 min                     │
+│    Directory: ~/worktrees/subscriptions │
 └─────────────────────────────────────────┘
 
-💡 Tip: Use Ctrl+C to stop a running chain
+💡 Tip: Recently completed shows last 10 chains
 ```
 
-## No Running Chains
+## Step 5: Cleanup Old Entries
 
-If no state file or no running chains:
-
-```
-No chains currently running
-
-Available chains:
-  /chainer:list      Show available chains
-  /chainer:run       Execute a chain
-```
+Keep only the last 10 completed chains in the state file to prevent unbounded growth.
 
 ## Implementation Notes
 
 You are implementing this command. You should:
 
-1. **Check for state file** at `.claude/chainer-state.json`
-2. **Parse JSON** if file exists
-3. **Validate running chains** (check if PIDs still exist)
-4. **Calculate time running** from started timestamp
-5. **Format output** with visual indicators:
-   - 🔄 for running
-   - ✅ for completed
-   - ❌ for failed
-6. **Show helpful message** if no chains running
+1. **Read state file** `.claude/chainer-state.json` using Read tool
+2. **Validate running processes** using `ps -p <pid>` via Bash tool
+3. **Calculate durations** from timestamps
+4. **Format relative times** (e.g., "5 min ago", "1 hour ago")
+5. **Update state file** if processes have died
+6. **Display formatted output** with clear visual hierarchy
+7. **Limit completed chains** to last 10 entries
 
-Remember:
-- State tracking is future work (Phase 4)
-- For now, just show "No chains currently running"
-- This command will be fully implemented in Phase 4
+Process states:
+- 🔄 Running (PID is alive)
+- ✅ Completed successfully (success=true)
+- ❌ Failed (success=false or PID died)
+
+Edge cases:
+- No state file exists → helpful message
+- No running chains → only show completed
+- No completed chains → only show running
+- Neither → show helpful getting started message

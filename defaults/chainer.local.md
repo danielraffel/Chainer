@@ -68,6 +68,7 @@ chains:
 defaults:
   spec_directory: audit
   max_iterations: 50
+  auto_spawn_strategy: ask  # Options: ask, always, never
 ---
 
 # Chainer Configuration
