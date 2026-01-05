@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chainer - Universal Plugin Orchestration for Claude Code</title>
+    <meta name="description" content="Chain any Claude Code plugins together with simple configuration. Automate your development workflows.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 4rem 0;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            padding: 2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .chain-example {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 60%, #fff176 60%);
+            padding: 0 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>⛓️ Chainer</h1>
+            <p class="tagline">Universal plugin orchestration for Claude Code</p>
+            <p>Chain any plugins together with simple YAML configuration</p>
+            <a href="#install" class="cta">Get Started</a>
+        </div>
+    </header>
+
+    <section>
+        <div class="container">
+            <h2>What is Chainer?</h2>
+            <p style="font-size: 1.2rem; max-width: 800px;">
+                Chainer lets you combine multiple Claude Code plugins into automated workflows called "chains".
+                Instead of running each plugin manually, <span class="highlight">define a chain once</span> and execute
+                your entire workflow with a single command.
+            </p>
+
+            <div class="chain-example">
+                <h3>One command replaces this entire workflow:</h3>
+                <pre><code># Without Chainer - manual steps
+/worktree-manager:start oauth
+/feature-dev:feature-dev "Build OAuth authentication"
+# Save spec to audit/oauth.md
+/ralph-wiggum:ralph-loop
+# Wait for implementation...
+
+# With Chainer - one command
+/chainer:run worktree-plan-implement \
+  --feature_name="oauth" \
+  --prompt="Build OAuth authentication"</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f9f9f9;">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🔗 Chain Any Plugins</h3>
+                    <p>Connect feature-dev, ralph-wiggum, worktree-manager, or any Claude Code plugins in sequence.</p>
+                </div>
+                <div class="feature">
+                    <h3>⚙️ Config-Driven</h3>
+                    <p>Define chains in simple YAML - no code required. Shareable and version-controllable.</p>
+                </div>
+                <div class="feature">
+                    <h3>🎨 Visual Editor</h3>
+                    <p>Use settings.html for drag-and-drop chain building. Perfect for non-technical users.</p>
+                </div>
+                <div class="feature">
+                    <h3>🔄 Variable Substitution</h3>
+                    <p>Pass outputs from one step to the next with <code>{{variable}}</code> syntax.</p>
+                </div>
+                <div class="feature">
+                    <h3>📦 Built-in Chains</h3>
+                    <p>Get started immediately with pre-configured workflows for common tasks.</p>
+                </div>
+                <div class="feature">
+                    <h3>🌐 Community Library</h3>
+                    <p>Share chains with others. Import chains from GitHub URLs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="install">
+        <div class="container">
+            <h2>Installation</h2>
+            <pre><code>git clone https://github.com/danielraffel/Chainer ~/.claude/plugins/chainer</code></pre>
+            <p style="margin-top: 1rem;">That's it! Chainer is automatically detected by Claude Code.</p>
+        </div>
+    </section>
+
+    <section style="background: #f9f9f9;">
+        <div class="container">
+            <h2>Built-in Chains</h2>
+
+            <h3 style="margin-top: 2rem;">plan-and-implement</h3>
+            <p>Complete feature development: plan with feature-dev, implement with ralph-wiggum</p>
+            <pre><code>/chainer:run plan-and-implement \
+  --prompt="Build user dashboard" \
+  --feature_name="dashboard"</code></pre>
+
+            <h3 style="margin-top: 2rem;">worktree-plan-implement</h3>
+            <p>Full workflow with isolated worktree: create worktree, plan, implement</p>
+            <pre><code>/chainer:run worktree-plan-implement \
+  --feature_name="oauth" \
+  --prompt="Build OAuth2 authentication"</code></pre>
+
+            <h3 style="margin-top: 2rem;">plan-only</h3>
+            <p>Just planning, no implementation</p>
+            <pre><code>/chainer:run plan-only \
+  --prompt="Design payment system" \
+  --feature_name="payments"</code></pre>
+
+            <h3 style="margin-top: 2rem;">implement-only</h3>
+            <p>Implement from an existing spec</p>
+            <pre><code>/chainer:run implement-only \
+  --spec_file="audit/oauth.md"</code></pre>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>Create Custom Chains</h2>
+            <p>Define chains in <code>~/.claude/chainer.local.md</code>:</p>
+            <pre><code>---
+chains:
+  my-workflow:
+    enabled: true
+    description: "Custom development workflow"
+    inputs:
+      task: { required: true, description: "What to build" }
+    steps:
+      - name: plan
+        type: skill
+        skill: feature-dev:feature-dev
+        args: "{{task}}"
+      - name: test
+        type: script
+        script: npm test
+      - name: build
+        type: script
+        script: npm run build
+---</code></pre>
+        </div>
+    </section>
+
+    <section style="background: #f9f9f9;">
+        <div class="container">
+            <h2>Visual Chain Editor</h2>
+            <p>Open <code>settings.html</code> for a visual interface:</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>Drag-and-drop step reordering</li>
+                <li>Enable/disable chains with checkboxes</li>
+                <li>Add/remove inputs and steps</li>
+                <li>Import/export chains</li>
+                <li>Download configuration file</li>
+            </ul>
+            <pre style="margin-top: 1rem;"><code>open ~/.claude/plugins/chainer/settings.html</code></pre>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>Related Projects</h2>
+            <ul style="margin-left: 2rem; font-size: 1.1rem; line-height: 2;">
+                <li><a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a> - Git worktree management</li>
+                <li><a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a> - Feature planning plugin</li>
+                <li><a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a> - Iterative implementation plugin</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Built with ❤️ by <a href="https://github.com/danielraffel">Daniel Raffel</a></p>
+            <p style="margin-top: 0.5rem;">
+                <a href="https://github.com/danielraffel/Chainer">GitHub</a> •
+                <a href="https://github.com/danielraffel/Chainer/blob/main/README.md">Documentation</a> •
+                <a href="https://github.com/danielraffel/Chainer/issues">Issues</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
