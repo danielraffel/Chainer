@@ -43,6 +43,28 @@ chains:
           SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
           bash "$SCRIPT_PATH" "Implement features from {{spec_file}}" --max-iterations 50 --completion-promise DONE
 
+  worktree-plan-implement:
+    enabled: true
+    description: "Create worktree, plan, implement - full workflow"
+    inputs:
+      feature_name: { required: true, description: "Feature name for worktree and spec" }
+      prompt: { required: true, description: "What to build" }
+      base_branch: { required: false, description: "Branch to branch from (default: main)" }
+    steps:
+      - name: create-worktree
+        type: skill
+        skill: worktree-manager:start
+        args: "{{feature_name}}{{#base_branch}} --base-branch={{base_branch}}{{/base_branch}}"
+      - name: plan
+        type: skill
+        skill: feature-dev:feature-dev
+        args: "{{prompt}}"
+      - name: implement
+        type: script
+        script: |
+          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+          bash "$SCRIPT_PATH" "Implement features from audit/{{feature_name}}.md" --max-iterations 50 --completion-promise DONE
+
 defaults:
   spec_directory: audit
   max_iterations: 50

@@ -74,6 +74,18 @@ Implement from an existing spec:
   --spec_file="audit/oauth.md"
 ```
 
+### `worktree-plan-implement`
+Full workflow with worktree creation (requires worktree-manager):
+1. Create isolated worktree
+2. Plan with `feature-dev`
+3. Implement with `ralph-wiggum`
+
+```bash
+/chainer:run worktree-plan-implement \
+  --feature_name="oauth" \
+  --prompt="Build OAuth2 authentication"
+```
+
 ## Creating Custom Chains
 
 ### Configuration File
