@@ -3,260 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chainer - Universal Plugin Orchestration for Claude Code</title>
-    <meta name="description" content="Chain any Claude Code plugins together with simple configuration. Automate your development workflows.">
+    <title>Chainer | Plugin for Claude Code</title>
+    <meta name="description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chainer">
+    <meta property="og:description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://danielraffel.github.io/Chainer/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Chainer">
+    <meta name="twitter:description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
+
     <style>
+        :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --gray: #888888;
+            --light-gray: #f4f4f4;
+            --accent: #667eea;
+            --code-bg: #1c1c1c;
+            --code-text: #e0e0e0;
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-mono: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+            --spacing-unit: 2rem;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fff;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4rem 0;
-            text-align: center;
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
         }
 
         h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .tagline {
-            font-size: 1.5rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        .cta {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-top: 1rem;
-            transition: transform 0.2s;
-        }
-
-        .cta:hover {
-            transform: translateY(-2px);
-        }
-
-        section {
-            padding: 4rem 0;
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: var(--spacing-unit);
         }
 
         h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #667eea;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: calc(var(--spacing-unit) * 1.5);
         }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            color: var(--gray);
         }
 
-        .feature {
-            padding: 2rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-
-        .feature h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        code {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-        }
-
-        pre {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .chain-example {
-            margin: 2rem 0;
-            padding: 2rem;
-            background: #f0f7ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
-        }
-
-        footer {
-            background: #f5f5f5;
-            padding: 2rem 0;
-            text-align: center;
-            margin-top: 4rem;
+        p {
+            font-size: 1.25rem;
+            max-width: 34ch;
+            color: #333;
+            margin-bottom: var(--spacing-unit);
         }
 
         a {
-            color: #667eea;
-            text-decoration: none;
+            color: var(--text);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: color 0.2s;
         }
 
         a:hover {
-            text-decoration: underline;
+            color: var(--accent);
         }
 
-        .highlight {
-            background: linear-gradient(transparent 60%, #fff176 60%);
-            padding: 0 0.3rem;
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+        }
+
+        section {
+            padding: calc(var(--spacing-unit) * 4) 0;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        section:first-of-type {
+            border-top: none;
+            padding-top: calc(var(--spacing-unit) * 6);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--spacing-unit);
+        }
+
+        .col-left { grid-column: 1 / 6; }
+        .col-right { grid-column: 7 / 13; }
+        .col-full { grid-column: 1 / 13; }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .col-left, .col-right { grid-column: 1 / 13; }
+            h1 { font-size: 3rem; }
+            section { padding: calc(var(--spacing-unit) * 2) 0; }
+        }
+
+        /* Components */
+        .tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border: 1px solid var(--text);
+            padding: 4px 12px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .tag:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0 var(--spacing-unit) 0;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            border-bottom: 1px solid var(--light-gray);
+            padding: 1.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 2rem;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            overflow-x: auto;
+            line-height: 1.7;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .code-comment { color: #6a6a6a; }
+        .code-command { color: #fff; font-weight: bold; }
+        .code-prompt { color: var(--accent); user-select: none; }
+
+        .btn {
+            display: inline-block;
+            background: var(--text);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-top: var(--spacing-unit);
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            padding: var(--spacing-unit) 0;
+            border-top: 4px solid var(--text);
+            margin-top: var(--spacing-unit);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+
+        /* Copy button */
+        .code-block-wrapper {
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: #333;
+            color: #aaa;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #444; color: #fff; }
+        .copy-btn.copied { background: var(--accent); color: #fff; }
+
+        /* Chain examples */
+        .chain-card {
+            margin-bottom: 1.5rem;
+        }
+        .chain-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .chain-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>⛓️ Chainer</h1>
-            <p class="tagline">Universal plugin orchestration for Claude Code</p>
-            <p>Chain any plugins together with simple YAML configuration</p>
-            <a href="#install" class="cta">Get Started</a>
-        </div>
-    </header>
 
-    <section>
-        <div class="container">
-            <h2>What is Chainer?</h2>
-            <p style="font-size: 1.2rem; max-width: 800px;">
-                Chainer lets you combine multiple Claude Code plugins into automated workflows called "chains".
-                Instead of running each plugin manually, <span class="highlight">define a chain once</span> and execute
-                your entire workflow with a single command.
-            </p>
+    <main class="container">
 
-            <div class="chain-example">
-                <h3>One command replaces this entire workflow:</h3>
-                <pre><code># Without Chainer - manual steps
-/worktree-manager:start oauth
-/feature-dev:feature-dev "Build OAuth authentication"
-# Save spec to audit/oauth.md
-/ralph-wiggum:ralph-loop
-# Wait for implementation...
-
-# With Chainer - one command
-/chainer:run worktree-plan-implement \
+        <!-- Hero Section -->
+        <section>
+            <a href="https://code.claude.com/docs/en/plugins" class="tag">Plugin for Claude Code</a>
+            <nav class="nav-links">
+                <a href="#concept">Concept</a>
+                <a href="#capabilities">Capabilities</a>
+                <a href="#installation">Installation</a>
+                <a href="#chains">Built-in Chains</a>
+                <a href="#custom">Custom Chains</a>
+            </nav>
+            <h1>Automate your<br>development workflows.</h1>
+            <div class="grid">
+                <div class="col-left">
+                    <p><b>Chainer</b> orchestrates Claude Code plugins into automated workflows. Chain planning, implementation, testing, and deployment into single commands.</p>
+                </div>
+                <div class="col-right">
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <div class="code-block"><span class="code-prompt">/</span>chainer:run worktree-plan-implement \
   --feature_name="oauth" \
-  --prompt="Build OAuth authentication"</code></pre>
-            </div>
-        </div>
-    </section>
-
-    <section style="background: #f9f9f9;">
-        <div class="container">
-            <h2>Key Features</h2>
-            <div class="features">
-                <div class="feature">
-                    <h3>🔗 Chain Any Plugins</h3>
-                    <p>Connect feature-dev, ralph-wiggum, worktree-manager, or any Claude Code plugins in sequence.</p>
-                </div>
-                <div class="feature">
-                    <h3>⚙️ Config-Driven</h3>
-                    <p>Define chains in simple YAML - no code required. Shareable and version-controllable.</p>
-                </div>
-                <div class="feature">
-                    <h3>🎨 Visual Editor</h3>
-                    <p>Use settings.html for drag-and-drop chain building. Perfect for non-technical users.</p>
-                </div>
-                <div class="feature">
-                    <h3>🔄 Variable Substitution</h3>
-                    <p>Pass outputs from one step to the next with <code>{{variable}}</code> syntax.</p>
-                </div>
-                <div class="feature">
-                    <h3>📦 Built-in Chains</h3>
-                    <p>Get started immediately with pre-configured workflows for common tasks.</p>
-                </div>
-                <div class="feature">
-                    <h3>🌐 Community Library</h3>
-                    <p>Share chains with others. Import chains from GitHub URLs.</p>
+  --prompt="Build OAuth2"</div>
+                    </div>
+                    <div class="chain-desc" style="margin-top: 1rem;">
+                        Creates worktree, plans with feature-dev, implements with ralph-wiggum.
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="install">
-        <div class="container">
-            <h2>Installation</h2>
-            <pre><code>git clone https://github.com/danielraffel/Chainer ~/.claude/plugins/chainer</code></pre>
-            <p style="margin-top: 1rem;">That's it! Chainer is automatically detected by Claude Code.</p>
-        </div>
-    </section>
+        <!-- The Concept -->
+        <section id="concept">
+            <div class="grid">
+                <div class="col-left">
+                    <h3>The Concept</h3>
+                    <h2>Turn plugin sequences<br>into single commands.</h2>
+                </div>
+                <div class="col-right">
+                    <p>Instead of manually running multiple plugins in sequence, define a chain once and execute your entire workflow with one command.</p>
+                    <p><strong>Chainer orchestrates any Claude Code plugins.</strong> Create worktrees, plan features, implement code, run tests, and deploy—all automated through YAML configuration.</p>
+                </div>
+            </div>
+        </section>
 
-    <section style="background: #f9f9f9;">
-        <div class="container">
-            <h2>Built-in Chains</h2>
+        <!-- Features -->
+        <section id="capabilities">
+            <div class="grid">
+                <div class="col-left">
+                    <h3>Capabilities</h3>
+                    <p>Designed for multi-step workflows that benefit from automation.</p>
+                </div>
+                <div class="col-right">
+                    <ul class="feature-list">
+                        <li>Chain any Claude Code plugins in sequence</li>
+                        <li>Config-driven workflows with YAML</li>
+                        <li>Variable substitution between steps</li>
+                        <li>Parallel execution with tmux support</li>
+                        <li>Community chain library</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-            <h3 style="margin-top: 2rem;">plan-and-implement</h3>
-            <p>Complete feature development: plan with feature-dev, implement with ralph-wiggum</p>
-            <pre><code>/chainer:run plan-and-implement \
-  --prompt="Build user dashboard" \
-  --feature_name="dashboard"</code></pre>
+        <!-- Installation -->
+        <section id="installation">
+            <div class="grid">
+                <div class="col-full">
+                    <h3>Installation</h3>
+                    <h2>One line setup.</h2>
+                    <p style="max-width: 60ch;">Requires <a href="https://claude.ai/code">Claude Code</a>. Works best with <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a>, and <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a>.</p>
+                </div>
+                <div class="col-full">
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
+                        <div class="code-block" id="install-code">
+<span class="code-comment"># Clone the repo</span>
+git clone https://github.com/danielraffel/Chainer ~/.claude/plugins/chainer
 
-            <h3 style="margin-top: 2rem;">worktree-plan-implement</h3>
-            <p>Full workflow with isolated worktree: create worktree, plan, implement</p>
-            <pre><code>/chainer:run worktree-plan-implement \
-  --feature_name="oauth" \
-  --prompt="Build OAuth2 authentication"</code></pre>
+<span class="code-comment"># That's it - Chainer is automatically detected</span>
+cd /your/project
+claude
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 2rem; align-items: center; margin-top: 1.5rem; flex-wrap: wrap;">
+                        <a href="https://github.com/danielraffel/Chainer" class="btn" style="margin: 0;">View on GitHub &rarr;</a>
+                        <div style="color: var(--gray); font-size: 0.9rem;">
+                            Claude Code auto-discovers plugins in <code style="background: var(--light-gray); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">~/.claude/plugins/</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            <h3 style="margin-top: 2rem;">plan-only</h3>
-            <p>Just planning, no implementation</p>
-            <pre><code>/chainer:run plan-only \
-  --prompt="Design payment system" \
-  --feature_name="payments"</code></pre>
+        <!-- Built-in Chains -->
+        <section id="chains">
+            <div class="grid">
+                <div class="col-full">
+                    <h3>Built-in Chains</h3>
+                    <h2>Ready to use.</h2>
+                </div>
 
-            <h3 style="margin-top: 2rem;">implement-only</h3>
-            <p>Implement from an existing spec</p>
-            <pre><code>/chainer:run implement-only \
-  --spec_file="audit/oauth.md"</code></pre>
-        </div>
-    </section>
+                <div class="col-left">
+                    <div class="chain-card">
+                        <div class="chain-title">worktree-plan-implement</div>
+                        <div class="code-block-wrapper">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-block">/chainer:run worktree-plan-implement \
+  --feature_name="payments" \
+  --prompt="Stripe integration"</div>
+                        </div>
+                        <div class="chain-desc">
+                            Full workflow: creates worktree, plans, and implements.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="chain-card">
+                        <div class="chain-title">plan-and-implement</div>
+                        <div class="code-block-wrapper">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-block">/chainer:run plan-and-implement \
+  --prompt="Add user auth" \
+  --feature_name="auth"</div>
+                        </div>
+                        <div class="chain-desc">
+                            Plans with feature-dev, implements with ralph-wiggum.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-left">
+                    <div class="chain-card">
+                        <div class="chain-title">plan-only</div>
+                        <div class="code-block-wrapper">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-block">/chainer:run plan-only \
+  --prompt="Design API" \
+  --feature_name="api"</div>
+                        </div>
+                        <div class="chain-desc">
+                            Just planning, no implementation.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="chain-card">
+                        <div class="chain-title">implement-only</div>
+                        <div class="code-block-wrapper">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-block">/chainer:run implement-only \
+  --spec_file="audit/api.md"</div>
+                        </div>
+                        <div class="chain-desc">
+                            Implements from existing spec file.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section>
-        <div class="container">
-            <h2>Create Custom Chains</h2>
-            <p>Define chains in <code>~/.claude/chainer.local.md</code>:</p>
-            <pre><code>---
+        <!-- Custom Chains -->
+        <section id="custom">
+            <div class="grid">
+                <div class="col-full">
+                    <h3>Custom Chains</h3>
+                    <h2>Build your own workflows.</h2>
+                    <p style="max-width: 60ch;">Define chains in <code>~/.claude/chainer.local.md</code> using simple YAML. See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community chains library</a> for examples.</p>
+                </div>
+                <div class="col-full">
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <div class="code-block"><span class="code-comment"># ~/.claude/chainer.local.md</span>
+---
 chains:
   my-workflow:
     enabled: true
     description: "Custom development workflow"
     inputs:
-      task: { required: true, description: "What to build" }
+      task: { required: true }
     steps:
       - name: plan
         type: skill
@@ -268,45 +445,49 @@ chains:
       - name: build
         type: script
         script: npm run build
----</code></pre>
-        </div>
-    </section>
+---</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section style="background: #f9f9f9;">
-        <div class="container">
-            <h2>Visual Chain Editor</h2>
-            <p>Open <code>settings.html</code> for a visual interface:</p>
-            <ul style="margin-left: 2rem; margin-top: 1rem;">
-                <li>Drag-and-drop step reordering</li>
-                <li>Enable/disable chains with checkboxes</li>
-                <li>Add/remove inputs and steps</li>
-                <li>Import/export chains</li>
-                <li>Download configuration file</li>
-            </ul>
-            <pre style="margin-top: 1rem;"><code>open ~/.claude/plugins/chainer/settings.html</code></pre>
-        </div>
-    </section>
+    </main>
 
-    <section>
-        <div class="container">
-            <h2>Related Projects</h2>
-            <ul style="margin-left: 2rem; font-size: 1.1rem; line-height: 2;">
-                <li><a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a> - Git worktree management</li>
-                <li><a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a> - Feature planning plugin</li>
-                <li><a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a> - Iterative implementation plugin</li>
-            </ul>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>Built with ❤️ by <a href="https://github.com/danielraffel">Daniel Raffel</a></p>
-            <p style="margin-top: 0.5rem;">
-                <a href="https://github.com/danielraffel/Chainer">GitHub</a> •
-                <a href="https://github.com/danielraffel/Chainer/blob/main/README.md">Documentation</a> •
-                <a href="https://github.com/danielraffel/Chainer/issues">Issues</a>
-            </p>
+    <footer class="container">
+        <div class="grid">
+            <div class="col-left">
+                <a href="https://danielraffel.me" style="text-decoration: none;">Daniel Raffel</a> &copy; 2026
+            </div>
+            <div class="col-right" style="text-align: right;">
+                <a href="https://github.com/danielraffel/Chainer" style="text-decoration: none;">GitHub Repository ↗</a>
+            </div>
         </div>
     </footer>
+
+    <script>
+        function copyInstall(btn) {
+            const code = document.getElementById('install-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function copyCode(btn) {
+            const code = btn.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
