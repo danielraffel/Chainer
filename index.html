@@ -358,7 +358,7 @@
                 <div class="col-right">
                     <div class="code-block-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        <div class="code-block"><span class="code-prompt">/</span>chainer Add OAuth login to my app</div>
+                        <div class="code-block"><span class="code-prompt">/</span>chainer:run Add OAuth login to my app</div>
                     </div>
                     <div class="chain-desc" style="margin-top: 1rem;">
                         Chainer interprets what you want and confirms before running.
@@ -451,7 +451,7 @@ claude --plugin-dir ~/Chainer/plugin
                         <div class="chain-title">Plan + Implement</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block"><span class="code-prompt">/</span>chainer Add user authentication</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer:run Add user authentication</div>
                         </div>
                         <div class="chain-desc">
                             The default: plan it, then build it.
@@ -471,7 +471,7 @@ claude --plugin-dir ~/Chainer/plugin
                         <div class="chain-title">Just Planning</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block"><span class="code-prompt">/</span>chainer design a REST API for orders</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer:run design a REST API for orders</div>
                         </div>
                         <div class="chain-desc">
                             Specify what you want - planning only or full implementation.
@@ -482,7 +482,7 @@ claude --plugin-dir ~/Chainer/plugin
                                 <div style="margin-bottom: 0.75rem;"><strong>Here's what I'll do:</strong></div>
                                 <div style="margin-bottom: 0.5rem;">1. <code>/feature-dev</code> will analyze your codebase and create an API design</div>
                                 <div style="margin-bottom: 0.5rem; padding-left: 1rem; color: var(--gray);">→ Saves plan to <code>specs/</code> in your project</div>
-                                <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--gray);">No automatic implementation. Review the plan, then say <code>/chainer implement</code> when ready.</div>
+                                <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--gray);">No automatic implementation. Review the plan, then say <code>/chainer:run implement</code> when ready.</div>
                             </div>
                         </div>
                     </div>
@@ -492,7 +492,7 @@ claude --plugin-dir ~/Chainer/plugin
                         <div class="chain-title">Implement Existing Plan</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block"><span class="code-prompt">/</span>chainer implement the API spec</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer:run implement the API spec</div>
                         </div>
                         <div class="chain-desc">
                             Have a plan already? Just implement it.
@@ -511,7 +511,7 @@ claude --plugin-dir ~/Chainer/plugin
                         <div class="chain-title">Isolated Worktree</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block"><span class="code-prompt">/</span>chainer build payments in a new worktree</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer:run build payments in a new worktree</div>
                         </div>
                         <div class="chain-desc">
                             Mention "worktree" for complete isolation.
@@ -620,7 +620,7 @@ patterns:
                 </div>
                 <div class="col-right" style="display: flex; flex-direction: column; justify-content: center;">
                     <p style="margin-bottom: 1rem;"><strong>Now you can say:</strong></p>
-                    <div class="code-block" style="margin: 0; padding: 1rem;">/chainer Add OAuth with tests</div>
+                    <div class="code-block" style="margin: 0; padding: 1rem;">/chainer:run Add OAuth with tests</div>
                     <p style="margin-top: 1rem; color: var(--gray); font-size: 0.95rem;">Chainer detects "with tests" and runs your plan-implement-test chain, which adds <code>npm test</code> after implementation.</p>
                 </div>
                 <div class="col-full" style="margin-top: 2rem;">
@@ -643,12 +643,12 @@ patterns:
                             <p>Chainer lets you automate sequences of actions in Claude Code by just describing what you want in plain English.</p>
                             <p><strong>The simple mental model:</strong> You tell Chainer what you want to build. Chainer figures out the steps, shows you what it'll do, and asks for confirmation. Then it runs everything automatically.</p>
                             <p><strong>How it works:</strong></p>
-                            <p>1. You type something like <code>/chainer Add user login</code><br>
+                            <p>1. You type something like <code>/chainer:run Add user login</code><br>
                             2. Chainer shows you: "I'll run feature-dev to plan, then ralph-wiggum to implement"<br>
                             3. You click Start (or Edit if you want to change something)<br>
                             4. Chainer runs each step automatically<br>
                             5. You come back to working code</p>
-                            <p><strong>Example:</strong> Instead of remembering commands and syntax, just say <code>/chainer build payments in a new worktree</code> and Chainer handles creating the isolated workspace, planning, and implementing.</p>
+                            <p><strong>Example:</strong> Instead of remembering commands and syntax, just say <code>/chainer:run build payments in a new worktree</code> and Chainer handles creating the isolated workspace, planning, and implementing.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -695,7 +695,7 @@ chains:
       - skill: feature-dev
       - skill: ralph-wiggum
       - script: npm test</code></pre>
-                            <p>Now when you say <code>/chainer Add OAuth with tests</code>, Chainer detects "with tests" and runs your custom workflow.</p>
+                            <p>Now when you say <code>/chainer:run Add OAuth with tests</code>, Chainer detects "with tests" and runs your custom workflow.</p>
                             <p>See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community patterns</a> for more examples.</p>
                         </div>
                     </div>
