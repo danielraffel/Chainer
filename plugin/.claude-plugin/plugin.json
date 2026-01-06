@@ -19,6 +19,10 @@
     "check-deps": {
       "file": "commands/check-deps.md",
       "description": "Check plugin dependencies for a chain"
+    },
+    "suggest": {
+      "file": "commands/suggest.md",
+      "description": "Get plugin and chain suggestions based on natural language"
     }
   }
 }
