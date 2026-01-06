@@ -13,6 +13,8 @@ Chainer lets you combine multiple Claude Code plugins into automated workflows c
 - **Visual Editor**: Use `settings.html` to build chains with drag-and-drop
 - **Variable Substitution**: Pass outputs from one step to the next
 - **Built-in Chains**: Get started immediately with pre-configured workflows
+- **Dependency Detection**: Automatically checks for missing plugins before execution
+- **Smart Suggestions**: Discover plugins and chains through natural language
 
 ## Quick Start
 
@@ -32,8 +34,14 @@ open ~/.claude/plugins/chainer/settings.html
 ### Basic Usage
 
 ```bash
+# Discover plugins and chains with natural language
+/chainer:suggest "plan and implement a login feature"
+
 # List available chains
 /chainer:list
+
+# Check plugin dependencies for a chain
+/chainer:check-deps plan-and-implement
 
 # Run a chain
 /chainer:run plan-and-implement \
@@ -85,6 +93,70 @@ Full workflow with worktree creation (requires worktree-manager):
   --feature_name="oauth" \
   --prompt="Build OAuth2 authentication"
 ```
+
+## Plugin Discovery & Dependency Management
+
+### Smart Suggestions
+
+Not sure which plugin to use? Ask Chainer in natural language:
+
+```bash
+/chainer:suggest "review my code for security issues"
+```
+
+**Output:**
+```
+Suggestions for: "review my code for security issues"
+
+Matched plugins:
+  • security-guidance - Security best practices and guidance
+    Install: /plugin install security-guidance@claude-plugins-official
+    Matched keywords: "security"
+
+  • code-review - Code review and quality analysis
+    Install: /plugin install code-review@claude-plugins-official
+    Matched keywords: "review"
+```
+
+Chainer matches your description against 85+ keywords across all official plugins and recommends:
+- Relevant chains (if multiple plugins match)
+- Individual plugins with installation commands
+- Runnable examples you can copy-paste
+
+### Dependency Detection
+
+Chainer automatically checks for missing plugins **before** running a chain:
+
+```bash
+/chainer:run plan-and-implement --prompt "test"
+```
+
+**If plugins are missing:**
+```
+❌ Cannot run 'plan-and-implement' - missing required plugin(s)
+
+Missing plugins:
+  • ralph-wiggum - Autonomous implementation loops
+    Install: /plugin install ralph-wiggum@claude-plugins-official
+    Docs: https://awesomeclaude.ai/ralph-wiggum
+
+Dependency status for 'plan-and-implement':
+  ✅ feature-dev
+  ❌ ralph-wiggum
+
+To skip this check: /chainer:run plan-and-implement --skip-deps-check ...
+```
+
+**Check dependencies manually:**
+```bash
+# Check specific chain
+/chainer:check-deps plan-and-implement
+
+# Check all built-in chains
+/chainer:check-deps
+```
+
+This prevents frustrating errors mid-execution and shows exactly how to fix missing dependencies.
 
 ## Creating Custom Chains
 
@@ -286,11 +358,19 @@ Just want to plan without implementing?
 
 ### Missing plugin
 
+Chainer now detects this automatically before execution:
+
 ```
-❌ Plugin 'feature-dev' not found
+❌ Cannot run 'plan-only' - missing required plugin(s)
+
+Missing plugins:
+  • feature-dev - Feature planning with architecture focus
+    Install: /plugin install feature-dev@claude-plugins-official
 ```
 
-**Fix**: Install the required plugin
+**Fix**: Run the exact `/plugin install` command shown
+
+To see all dependencies: `/chainer:check-deps plan-only`
 
 ### Missing required input
 
@@ -311,10 +391,10 @@ See [FEATURE-PLAN-CHAINER-SPLIT.md](https://github.com/danielraffel/worktree-man
 
 ## Roadmap
 
-- **v0.1** (Current): Config-driven chains, visual editor
-- **v0.2** (Phase 4): Parallel execution, status tracking, tmux integration
-- **v0.3** (Phase 5): Inline pipe syntax, import/export, community chains
-- **v1.0** (Phase 6): Production ready, comprehensive docs
+- **v0.1** ✅: Config-driven chains, visual editor, built-in workflows
+- **v0.2** (Current) ✅: Dependency detection, plugin suggestions, tmux integration, status tracking
+- **v0.3** (Planned): Inline pipe syntax, import/export, community chains
+- **v1.0** (Future): Production ready, comprehensive docs, marketplace integration
 
 ## Contributing
 
