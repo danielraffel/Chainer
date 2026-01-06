@@ -128,6 +128,14 @@
         }
 
         /* Components */
+        .plugin-name {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
         .tag {
             display: inline-block;
             font-family: var(--font-mono);
@@ -294,7 +302,8 @@
     <main class="container">
 
         <!-- Hero Section -->
-        <section>
+        <section style="padding-top: calc(var(--spacing-unit) * 3.5);">
+            <span class="plugin-name">Chainer</span>
             <a href="https://code.claude.com/docs/en/plugins" class="tag">Plugin for Claude Code</a>
             <nav class="nav-links">
                 <a href="#concept">Concept</a>
