@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chainer | Plugin for Claude Code</title>
-    <meta name="description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
-
+    <meta name="description" content="A Claude Code plugin designed for orchestrating AI coding workflows by chaining together plugins.">
+    
     <!-- Open Graph -->
     <meta property="og:title" content="Chainer">
-    <meta property="og:description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
+    <meta property="og:description" content="A Claude Code plugin designed for orchestrating AI coding workflows by chaining together plugins.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://danielraffel.github.io/Chainer/">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Chainer">
-    <meta name="twitter:description" content="Universal plugin orchestration for Claude Code. Chain any plugins together with simple YAML configuration.">
+    <meta name="twitter:description" content="A Claude Code plugin designed for orchestrating AI coding workflows by chaining together plugins.">
 
     <style>
         :root {
@@ -559,6 +559,34 @@ chains:
                             <p>Yes! Chainer supports parallel execution using tmux.</p>
                             <p>When you try to run a second chain while one is already running, Chainer detects the conflict and offers to spawn a new tmux window or session. Each chain runs independently in its own isolated environment.</p>
                             <p>Use <code>/chainer:status</code> to see all running and recently completed chains.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-other-plugins">Do I need to install feature-dev and ralph-wiggum?</div>
+                        <div class="faq-answer">
+                            <p>No, they're optional. But, Chainer was designed to work best with other plugins like <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>.</p>
+                            <p>The power comes from pairing Chainer with other plugins for workflow automation. Chainer chains together <a href="https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev">feature-dev</a> (planning) and <a href="https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum">ralph-wiggum</a> (implementation) so you can describe what you want in plain English and come back to a completed feature in an isolated worktree.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-ralph-looping">Why does ralph-wiggum keep looping after the work is done?</div>
+                        <div class="faq-answer">
+                            <p>This is a known quirk of ralph-wiggum's design. To exit the loop, Claude must output the literal text <code>&lt;promise&gt;DONE&lt;/promise&gt;</code>. Sometimes Claude completes the work but says things like "Done", "Complete", or "Finished" instead of outputting the exact escape tag.</p>
+                            <p>When this happens, you'll see iterations increment (e.g., "Ralph iteration 25... 26... 27...") with Claude repeatedly confirming completion but not exiting. The loop will run until it hits the max iterations limit (default: 50).</p>
+                            <p><strong>This is harmless but wasteful.</strong> Your work was completed successfully—the extra iterations just burn through API credits. You can manually stop Claude (Ctrl+C) once you see the work is done, or wait for max iterations.</p>
+                            <p><strong>Update:</strong> We've added explicit exit instructions to the task prompt, and testing shows this <strong>significantly improves</strong> Claude's exit behavior. Most tasks now exit cleanly with the proper tag.</p>
+                            <p><strong>If you still see excessive looping:</strong></p>
+                            <p>1. Lower <code>default_max_iterations</code> in your config file (e.g., to 20) to cap wasted iterations.</p>
+                            <p>2. Manually stop Claude (Ctrl+C) once you see the work is done.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-parallel-ralph">Can I run multiple ralph-wiggum loops in parallel worktrees?</div>
+                        <div class="faq-answer">
+                            <p><strong>Not from the same directory.</strong> Ralph-wiggum's state file (<code>.claude/ralph-loop.local.md</code>) is tied to your Claude session's current working directory, not the worktree. If you run multiple Claude sessions from the same parent directory, they'll all see the same state file and interfere with each other.</p>
+                            <p><strong>Workaround:</strong> Run each Claude session <strong>from within the worktree directory</strong> instead of your main project directory:</p>
+                            <p><code>cd ~/worktrees/feature-a<br>claude --plugin-dir ~/worktree-manager/plugin</code></p>
+                            <p>This way each worktree has its own isolated <code>.claude/</code> directory, and ralph loops won't cross-contaminate. You can then have multiple terminals, each running Claude from a different worktree, all working independently.</p>
                         </div>
                     </div>
                 </div>

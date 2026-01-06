@@ -49,6 +49,131 @@ Read the chainer configuration from:
 
 Use the Read tool to load and parse the YAML frontmatter.
 
+## Step 2.5: Check Plugin Dependencies
+
+**Only for built-in chains** - user-defined chains skip this check.
+
+### Check for Skip Flag
+
+Parse arguments for `--skip-deps-check` flag:
+```javascript
+if (additionalArgs['skip-deps-check']) {
+  console.log('⚠️  Skipping dependency check (--skip-deps-check flag present)');
+  // Continue to Step 3
+}
+```
+
+### Load Plugin Registry
+
+Read the plugin registry to get dependency information:
+
+```javascript
+const registryPath = '${CLAUDE_PLUGIN_ROOT}/registry/plugins.yaml';
+const registryContent = Read(registryPath);
+const registry = parseYaml(registryContent);
+```
+
+If registry doesn't exist or can't be parsed:
+- Log warning: `⚠️  Could not load plugin registry - skipping dependency check`
+- Continue to Step 3
+
+### Determine Required Plugins
+
+```javascript
+const requiredPlugins = registry.chains[chainName]?.requires || [];
+
+// If chain not in registry (user-defined), skip check
+if (!requiredPlugins.length && !registry.chains[chainName]) {
+  // User-defined chain - skip dependency check
+  // Continue to Step 3
+}
+```
+
+### Check Installation Status
+
+Read Claude's installed plugins registry:
+
+```javascript
+const installedPath = '~/.claude/plugins/installed_plugins.json';
+const installedData = JSON.parse(Read(installedPath));
+
+const missing = [];
+const installed = [];
+
+for (const pluginName of requiredPlugins) {
+  const plugin = registry.plugins[pluginName];
+  const key = `${pluginName}@${plugin.marketplace}`;
+
+  if (installedData.plugins[key]) {
+    installed.push(pluginName);
+  } else {
+    missing.push({
+      name: pluginName,
+      marketplace: plugin.marketplace,
+      description: plugin.description,
+      docs: plugin.docs
+    });
+  }
+}
+```
+
+If `installed_plugins.json` doesn't exist or can't be parsed:
+- Treat as no plugins installed (empty object)
+- Continue with dependency check
+
+### Handle Results
+
+**If all dependencies satisfied (`missing.length === 0`):**
+- Continue to Step 3
+
+**If missing dependencies (`missing.length > 0`):**
+- Display error message
+- **ABORT execution** (do not proceed to Step 3)
+
+Error message format:
+```
+❌ Cannot run '{chainName}' - missing required plugin(s)
+
+Missing plugins:
+  • {name} - {description}
+    Install: /plugin install {name}@{marketplace}
+    {docs ? `Docs: ${docs}` : ''}
+
+  • {name2} - {description2}
+    Install: /plugin install {name2}@{marketplace2}
+
+Dependency status for '{chainName}':
+  ✅ {installedPlugin1}
+  ❌ {missingPlugin1}
+  ❌ {missingPlugin2}
+
+To skip this check: /chainer:run {chainName} --skip-deps-check [other args]
+```
+
+Example output:
+```
+❌ Cannot run 'plan-and-implement' - missing required plugin(s)
+
+Missing plugins:
+  • ralph-wiggum - Autonomous implementation loops
+    Install: /plugin install ralph-wiggum@claude-plugins-official
+    Docs: https://awesomeclaude.ai/ralph-wiggum
+
+Dependency status for 'plan-and-implement':
+  ✅ feature-dev
+  ❌ ralph-wiggum
+
+To skip this check: /chainer:run plan-and-implement --skip-deps-check --prompt="test"
+```
+
+### Edge Cases
+
+1. **Registry file missing**: Skip check with warning
+2. **installed_plugins.json missing**: Treat as no plugins installed
+3. **JSON parse error**: Log error, skip check with warning
+4. **User-defined chain**: Skip check entirely (not in registry)
+5. **--skip-deps-check flag**: Show warning, skip to Step 3
+
 ## Step 3: Validate Chain
 
 Check that:
