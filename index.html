@@ -251,6 +251,42 @@
             font-size: 0.9rem;
             margin-top: 0.75rem;
         }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .faq-question {
+            padding: 1.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .faq-question:hover { color: var(--accent); }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--gray);
+            transition: transform 0.2s;
+        }
+        .faq-item.open .faq-question::after {
+            content: '−';
+        }
+        .faq-answer {
+            display: none;
+            padding-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #444;
+        }
+        .faq-answer p { max-width: none; font-size: 1rem; margin-bottom: 1rem; }
+        .faq-answer p:last-child { margin-bottom: 0; }
+        .faq-item.open .faq-answer { display: block; }
     </style>
 </head>
 <body>
@@ -266,6 +302,7 @@
                 <a href="#installation">Installation</a>
                 <a href="#chains">Built-in Chains</a>
                 <a href="#custom">Custom Chains</a>
+                <a href="#faq">FAQ</a>
             </nav>
             <h1>Automate your<br>development workflows.</h1>
             <div class="grid">
@@ -325,7 +362,7 @@
                 <div class="col-full">
                     <h3>Installation</h3>
                     <h2>One line setup.</h2>
-                    <p style="max-width: 60ch;">Requires <a href="https://claude.ai/code">Claude Code</a>. Works best with <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a>, and <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a>.</p>
+                    <p style="max-width: 60ch;">Requires <a href="https://claude.ai/code">Claude Code</a>. Works great with plugins like <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a>, and more.</p>
                 </div>
                 <div class="col-full">
                     <div class="code-block-wrapper">
@@ -451,6 +488,83 @@ chains:
             </div>
         </section>
 
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="grid">
+                <div class="col-full">
+                    <h3>FAQ</h3>
+                    <h2>Common questions.</h2>
+                </div>
+                <div class="col-full">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-simple-explanation">Can you explain this without all the jargon?</div>
+                        <div class="faq-answer">
+                            <p>Chainer lets you automate sequences of actions in Claude Code instead of doing them manually one-by-one.</p>
+                            <p><strong>The simple mental model:</strong> You define a "recipe" once (called a chain), and Chainer follows it automatically. Instead of manually running feature-dev, then ralph-wiggum, then tests—you create a chain that does all three in order.</p>
+                            <p><strong>How it works:</strong></p>
+                            <p>1. You define a chain in a simple config file (YAML).<br>
+                            2. You tell Chainer to run that chain.<br>
+                            3. Chainer executes each step in sequence automatically.<br>
+                            4. You come back to completed work.</p>
+                            <p><strong>Example:</strong> Instead of manually creating a worktree, running feature-dev to plan, then ralph-wiggum to implement—you just run <code>/chainer:run worktree-plan-implement</code> and all three happen automatically.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-requirements">What do I need to use Chainer?</div>
+                        <div class="faq-answer">
+                            <p>You need <a href="https://claude.ai/code">Claude Code</a> installed. That's it for basic use.</p>
+                            <p>The built-in chains use these plugins, so install them to use those chains:</p>
+                            <p>• <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a> - For the worktree-plan-implement chain<br>
+                            • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a> - For planning chains<br>
+                            • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a> - For implementation chains</p>
+                            <p>But you can create custom chains that use any plugins you want.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-create-chains">How do I create my own chains?</div>
+                        <div class="faq-answer">
+                            <p>Edit <code>~/.claude/chainer.local.md</code> and add your chain definition in YAML format. Here's a simple example:</p>
+                            <pre style="margin: 1rem 0;"><code>---
+chains:
+  my-workflow:
+    enabled: true
+    description: "Build and test"
+    inputs:
+      feature: { required: true }
+    steps:
+      - name: plan
+        type: skill
+        skill: feature-dev:feature-dev
+        args: "{{feature}}"
+      - name: test
+        type: script
+        script: npm test
+---</code></pre>
+                            <p>Then run it with: <code>/chainer:run my-workflow --feature="Add auth"</code></p>
+                            <p>See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community chains</a> for more examples.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-vs-manual">Why use chains instead of running plugins manually?</div>
+                        <div class="faq-answer">
+                            <p><strong>Consistency:</strong> The same steps happen every time, in the same order.</p>
+                            <p><strong>Speed:</strong> One command instead of multiple manual steps.</p>
+                            <p><strong>Shareability:</strong> Teams can share chains so everyone uses the same workflow.</p>
+                            <p><strong>Automation:</strong> Run complex workflows (worktree creation + planning + implementation + testing) with a single command.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-parallel">Can I run multiple chains in parallel?</div>
+                        <div class="faq-answer">
+                            <p>Yes! Chainer supports parallel execution using tmux.</p>
+                            <p>When you try to run a second chain while one is already running, Chainer detects the conflict and offers to spawn a new tmux window or session. Each chain runs independently in its own isolated environment.</p>
+                            <p>Use <code>/chainer:status</code> to see all running and recently completed chains.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="container">
@@ -487,6 +601,19 @@ chains:
                     btn.classList.remove('copied');
                 }, 2000);
             });
+        }
+
+        function toggleFaq(el) {
+            el.parentElement.classList.toggle('open');
+        }
+
+        // Open FAQ if hash matches
+        if (window.location.hash) {
+            const target = document.getElementById(window.location.hash.substring(1));
+            if (target && target.classList.contains('faq-question')) {
+                target.parentElement.classList.add('open');
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     </script>
 </body>
