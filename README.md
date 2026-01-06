@@ -1,20 +1,24 @@
 # ⛓️ Chainer
 
-Universal plugin orchestration for Claude Code - chain any plugins together with simple configuration.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+A Claude Code plugin that lets you describe what you want to build, then suggests and runs the right plugins—end to end.
+
+> **⚠️ Early Development**: Chainer is in active development. Expect rough edges, breaking changes, and incomplete features. Some documented features are designed but not yet implemented.
 
 ## What is Chainer?
 
-Chainer lets you combine multiple Claude Code plugins into automated workflows called "chains". Instead of manually running each plugin one after another, define a chain once and execute your entire workflow with a single command.
+Chainer lets you combine multiple Claude Code plugins into automated workflows called "chains". Just describe your goal in natural language—Chainer figures out which plugins to run and in what order.
 
 ## Features
 
+- **Natural Language**: Just describe what you want to build
+- **Chain Plugins**: Combine any Claude Code plugins in sequence
+- **Smart Questions**: Interactive clarifying questions from any plugin
 - **Config-Driven**: Define chains in YAML - no code required
-- **Universal**: Chain any Claude Code skills or plugins together
-- **Visual Editor**: Use `settings.html` to build chains with drag-and-drop
-- **Variable Substitution**: Pass outputs from one step to the next
 - **Built-in Chains**: Get started immediately with pre-configured workflows
 - **Dependency Detection**: Automatically checks for missing plugins before execution
-- **Smart Suggestions**: Discover plugins and chains through natural language
+- **Plugin Discovery**: Discover plugins and chains through natural language suggestions
 
 ## Quick Start
 
@@ -22,13 +26,13 @@ Chainer lets you combine multiple Claude Code plugins into automated workflows c
 
 ```bash
 # Clone the repository
-git clone https://github.com/danielraffel/Chainer ~/.claude/plugins/chainer
+git clone https://github.com/danielraffel/Chainer ~/Chainer
 
-# Copy default configuration
-cp ~/.claude/plugins/chainer/defaults/chainer.local.md ~/.claude/chainer.local.md
+# Load the plugin
+claude --plugin-dir ~/Chainer/plugin
 
-# Open settings page to customize
-open ~/.claude/plugins/chainer/settings.html
+# (Optional) Copy default configuration
+cp ~/Chainer/defaults/chainer.local.md ~/.claude/chainer.local.md
 ```
 
 ### Basic Usage
