@@ -7,6 +7,8 @@ argument-hint: "<description>"
 
 Intelligently suggest plugins and chains based on what you want to do.
 
+**User Communication:** Be direct. Show suggestions immediately without explaining the matching process.
+
 ## Usage
 
 ```bash

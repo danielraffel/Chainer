@@ -259,6 +259,38 @@
             font-size: 0.9rem;
             margin-top: 0.75rem;
         }
+        .learn-more {
+            color: var(--accent);
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .learn-more:hover { color: var(--text); }
+        .details {
+            display: none;
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .details.open { display: block; }
+        .details code {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+        .step-list {
+            margin: 0.75rem 0;
+            padding-left: 1.25rem;
+        }
+        .step-list li {
+            margin-bottom: 0.5rem;
+        }
 
         /* FAQ */
         .faq-item {
@@ -309,24 +341,38 @@
                 <a href="#concept">Concept</a>
                 <a href="#capabilities">Capabilities</a>
                 <a href="#installation">Installation</a>
-                <a href="#chains">Built-in Chains</a>
-                <a href="#custom">Custom Chains</a>
+                <a href="#chains">Examples</a>
+                <a href="#questions">Smart Questions</a>
+                <a href="#custom">Custom Patterns</a>
                 <a href="#faq">FAQ</a>
             </nav>
-            <h1>Automate your<br>development workflows.</h1>
+            <h1>Just describe<br>your goal.</h1>
             <div class="grid">
                 <div class="col-left">
-                    <p><b>Chainer</b> orchestrates Claude Code plugins into automated workflows. Chain planning, implementation, testing, and deployment into single commands.</p>
+                    <p><b>Chainer</b> lets you tell Claude Code what you want to build, then it suggests and runs the right plugins—end to end.</p>
                 </div>
                 <div class="col-right">
                     <div class="code-block-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        <div class="code-block"><span class="code-prompt">/</span>chainer:run worktree-plan-implement \
-  --feature_name="oauth" \
-  --prompt="Build OAuth2"</div>
+                        <div class="code-block"><span class="code-prompt">/</span>chainer Add OAuth login to my app</div>
                     </div>
                     <div class="chain-desc" style="margin-top: 1rem;">
-                        Creates worktree, plans with feature-dev, implements with ralph-wiggum.
+                        Chainer interprets what you want and confirms before running.
+                        <span class="learn-more" onclick="toggleDetails(this)">Learn more</span>
+                    </div>
+                    <div class="details">
+                        <strong>Chainer will respond with a confirmation:</strong>
+                        <div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin: 0.75rem 0; font-family: var(--font-main);">
+                            <div style="margin-bottom: 0.75rem;">Here's what I'll do:</div>
+                            <div style="margin-bottom: 0.5rem;">1. <code>/feature-dev</code> will analyze your codebase and create a plan for adding OAuth</div>
+                            <div style="margin-bottom: 0.75rem;">2. <code>/ralph-wiggum</code> will implement the plan automatically (up to 50 passes)</div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <span style="background: var(--text); color: #fff; padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.85rem;">Start</span>
+                                <span style="background: #eee; padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.85rem;">Edit</span>
+                                <span style="background: #eee; padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.85rem;">Cancel</span>
+                            </div>
+                        </div>
+                        <strong>Result:</strong> You describe what you want in plain English, confirm the plan, come back to working code.
                     </div>
                 </div>
             </div>
@@ -337,11 +383,11 @@
             <div class="grid">
                 <div class="col-left">
                     <h3>The Concept</h3>
-                    <h2>Turn plugin sequences<br>into single commands.</h2>
+                    <h2>Orchestrate complex sequences<br>using simple requests.</h2>
                 </div>
                 <div class="col-right">
-                    <p>Instead of manually running multiple plugins in sequence, define a chain once and execute your entire workflow with one command.</p>
-                    <p><strong>Chainer orchestrates any Claude Code plugins.</strong> Create worktrees, plan features, implement code, run tests, and deploy—all automated through YAML configuration.</p>
+                    <p>Instead of knowing which plugins to run and in what order, let Chainer figure that out for you. Just describe what you're trying to do—Chainer finds the right plugins and runs them.</p>
+                    <p><strong>You're in control.</strong> Extend it to do new things your way, or use the defaults to create worktrees, plan features, implement code, run tests, and deploy.</p>
                 </div>
             </div>
         </section>
@@ -356,8 +402,10 @@
                 <div class="col-right">
                     <ul class="feature-list">
                         <li>Chain any Claude Code plugins in sequence</li>
+                        <li>Smart question handler - makes any plugin interactive</li>
                         <li>Config-driven workflows with YAML</li>
                         <li>Variable substitution between steps</li>
+                        <li>Answer history and smart defaults</li>
                         <li>Parallel execution with tmux support</li>
                         <li>Community chain library</li>
                     </ul>
@@ -370,129 +418,218 @@
             <div class="grid">
                 <div class="col-full">
                     <h3>Installation</h3>
-                    <h2>One line setup.</h2>
-                    <p style="max-width: 60ch;">Requires <a href="https://claude.ai/code">Claude Code</a>. Works great with plugins like <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a>, and more.</p>
+                    <h2>Simple setup.</h2>
+                    <p style="max-width: 60ch;">Requires <a href="https://claude.ai/code">Claude Code</a>. Works with plugins like <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a>, <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a>, and more.</p>
                 </div>
                 <div class="col-full">
                     <div class="code-block-wrapper">
                         <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
                         <div class="code-block" id="install-code">
 <span class="code-comment"># Clone the repo</span>
-git clone https://github.com/danielraffel/Chainer ~/.claude/plugins/chainer
+git clone https://github.com/danielraffel/Chainer ~/Chainer
 
-<span class="code-comment"># That's it - Chainer is automatically detected</span>
-cd /your/project
-claude
+<span class="code-comment"># Run Claude Code with the plugin</span>
+claude --plugin-dir ~/Chainer/plugin
                         </div>
                     </div>
                     <div style="display: flex; gap: 2rem; align-items: center; margin-top: 1.5rem; flex-wrap: wrap;">
                         <a href="https://github.com/danielraffel/Chainer" class="btn" style="margin: 0;">View on GitHub &rarr;</a>
                         <div style="color: var(--gray); font-size: 0.9rem;">
-                            Claude Code auto-discovers plugins in <code style="background: var(--light-gray); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">~/.claude/plugins/</code>
+                            Use <code style="background: var(--light-gray); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">--plugin-dir</code> each time, or copy to <code style="background: var(--light-gray); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">~/.claude/plugins/chainer</code> for auto-discovery
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Built-in Chains -->
+        <!-- Example Scenarios -->
         <section id="chains">
             <div class="grid">
                 <div class="col-full">
-                    <h3>Built-in Chains</h3>
-                    <h2>Ready to use.</h2>
+                    <h3>Example Scenarios</h3>
+                    <h2>Just say what you want.</h2>
+                    <p style="max-width: 60ch;">Chainer interprets natural language and shows you what it'll do before running. Here are common patterns.</p>
                 </div>
 
                 <div class="col-left">
                     <div class="chain-card">
-                        <div class="chain-title">worktree-plan-implement</div>
+                        <div class="chain-title">Plan + Implement</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block">/chainer:run worktree-plan-implement \
-  --feature_name="payments" \
-  --prompt="Stripe integration"</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer Add user authentication</div>
                         </div>
                         <div class="chain-desc">
-                            Full workflow: creates worktree, plans, and implements.
+                            The default: plan it, then build it.
+                            <span class="learn-more" onclick="toggleDetails(this)">Learn more</span>
+                        </div>
+                        <div class="details">
+                            <div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin: 0.5rem 0;">
+                                <div style="margin-bottom: 0.75rem;"><strong>Here's what I'll do:</strong></div>
+                                <div style="margin-bottom: 0.5rem;">1. <code>/feature-dev</code> will analyze your codebase and create a plan for user authentication</div>
+                                <div>2. <code>/ralph-wiggum</code> will implement the plan (up to 50 passes)</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-right">
                     <div class="chain-card">
-                        <div class="chain-title">plan-and-implement</div>
+                        <div class="chain-title">Just Planning</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block">/chainer:run plan-and-implement \
-  --prompt="Add user auth" \
-  --feature_name="auth"</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer design a REST API for orders</div>
                         </div>
                         <div class="chain-desc">
-                            Plans with feature-dev, implements with ralph-wiggum.
+                            Specify what you want - planning only or full implementation.
+                            <span class="learn-more" onclick="toggleDetails(this)">Learn more</span>
+                        </div>
+                        <div class="details">
+                            <div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin: 0.5rem 0;">
+                                <div style="margin-bottom: 0.75rem;"><strong>Here's what I'll do:</strong></div>
+                                <div style="margin-bottom: 0.5rem;">1. <code>/feature-dev</code> will analyze your codebase and create an API design</div>
+                                <div style="margin-bottom: 0.5rem; padding-left: 1rem; color: var(--gray);">→ Saves plan to <code>specs/</code> in your project</div>
+                                <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--gray);">No automatic implementation. Review the plan, then say <code>/chainer implement</code> when ready.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-left">
                     <div class="chain-card">
-                        <div class="chain-title">plan-only</div>
+                        <div class="chain-title">Implement Existing Plan</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block">/chainer:run plan-only \
-  --prompt="Design API" \
-  --feature_name="api"</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer implement the API spec</div>
                         </div>
                         <div class="chain-desc">
-                            Just planning, no implementation.
+                            Have a plan already? Just implement it.
+                            <span class="learn-more" onclick="toggleDetails(this)">Learn more</span>
+                        </div>
+                        <div class="details">
+                            <div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin: 0.5rem 0;">
+                                <div style="margin-bottom: 0.75rem;"><strong>Here's what I'll do:</strong></div>
+                                <div>1. <code>/ralph-wiggum</code> will implement <code>specs/api.md</code> (up to 50 passes)</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-right">
                     <div class="chain-card">
-                        <div class="chain-title">implement-only</div>
+                        <div class="chain-title">Isolated Worktree</div>
                         <div class="code-block-wrapper">
                             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            <div class="code-block">/chainer:run implement-only \
-  --spec_file="audit/api.md"</div>
+                            <div class="code-block"><span class="code-prompt">/</span>chainer build payments in a new worktree</div>
                         </div>
                         <div class="chain-desc">
-                            Implements from existing spec file.
+                            Mention "worktree" for complete isolation.
+                            <span class="learn-more" onclick="toggleDetails(this)">Learn more</span>
+                        </div>
+                        <div class="details">
+                            <div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin: 0.5rem 0;">
+                                <div style="margin-bottom: 0.75rem;"><strong>Here's what I'll do:</strong></div>
+                                <div style="margin-bottom: 0.5rem;">1. <code>/worktree-manager:start</code> creates <code>~/worktrees/payments/</code> on a new branch</div>
+                                <div style="margin-bottom: 0.5rem;">2. <code>/feature-dev</code> creates an implementation plan</div>
+                                <div style="margin-bottom: 0.5rem;">3. <code>/ralph-wiggum</code> implements the plan (up to 50 passes)</div>
+                                <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--gray);">All work stays isolated from your main branch.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Custom Chains -->
+        <!-- Smart Question Handler -->
+        <section id="questions">
+            <div class="grid">
+                <div class="col-full">
+                    <h3>Smart Questions</h3>
+                    <h2>Interactive questions<br>for any plugin.</h2>
+                    <p style="max-width: 60ch;">Chainer automatically detects when plugins ask clarifying questions and presents them in an easy-to-use interface. No more reading through long text lists.</p>
+                </div>
+
+                <div class="col-left">
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Before: Text wall</h4>
+                    <div class="code-block" style="font-size: 0.75rem; padding: 1rem;">Before I design the architecture:
+
+1. Invader behavior: Should invaders
+   move in formation or side-to-side?
+2. Lives: How many starting lives?
+3. Controls: Arrow keys or A/D?
+4. Audio: Include sound effects?
+5. UI: Start screen with instructions?
+
+Please answer these questions...</div>
+                </div>
+
+                <div class="col-right">
+                    <h4 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">After: Interactive UI</h4>
+                    <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; font-size: 0.85rem;">
+                        <div style="margin-bottom: 1.25rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Invader behavior</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+                                    <input type="radio" name="invaders" checked style="accent-color: var(--accent);">
+                                    <span>Formation with swooping attacks</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                                    <input type="radio" name="invaders" style="accent-color: var(--accent);">
+                                    <span>Side-to-side movement</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="color: var(--gray); font-size: 0.8rem; text-align: center;">Tab through questions • Up/Down to select</div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--gray);">Chainer detects questions, parses options, and presents them interactively - automatically.</p>
+                </div>
+
+                <div class="col-full" style="margin-top: 2rem;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 1rem; font-weight: 600;">On the Roadmap</h4>
+                    <div class="grid">
+                        <div class="col-left">
+                            <p><strong>Answer History:</strong> Chainer will remember your choices and suggest previous answers for similar questions.</p>
+                        </div>
+                        <div class="col-right">
+                            <p><strong>Smart Defaults:</strong> Project-type detection will suggest sensible defaults. Game projects get "Arrow keys", APIs get "JWT tokens".</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-full" style="margin-top: 1.5rem; background: var(--light-gray); padding: 1.5rem; border-radius: 8px;">
+                    <p style="margin: 0; max-width: none;"><strong>Works with a growing number of plugins:</strong> Chainer supports plugins that output text questions or use Claude Code's question API. <a href="https://github.com/danielraffel/Chainer/blob/main/SUPPORTED_PLUGINS.md">See what's supported →</a></p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--gray);">Enable in config: <code style="background: var(--code-bg); color: var(--code-text); padding: 0.2rem 0.5rem; border-radius: 3px;">question_handling.enabled: true</code></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Patterns -->
         <section id="custom">
             <div class="grid">
                 <div class="col-full">
-                    <h3>Custom Chains</h3>
-                    <h2>Build your own workflows.</h2>
-                    <p style="max-width: 60ch;">Define chains in <code>~/.claude/chainer.local.md</code> using simple YAML. See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community chains library</a> for examples.</p>
+                    <h3>Custom Patterns</h3>
+                    <h2>Teach Chainer your workflows.</h2>
+                    <p style="max-width: 60ch;">Define patterns that trigger specific chains. When Chainer sees matching words, it knows what workflow you want.</p>
                 </div>
-                <div class="col-full">
+                <div class="col-left">
                     <div class="code-block-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        <div class="code-block"><span class="code-comment"># ~/.claude/chainer.local.md</span>
----
-chains:
-  my-workflow:
-    enabled: true
-    description: "Custom development workflow"
-    inputs:
-      task: { required: true }
-    steps:
-      - name: plan
-        type: skill
-        skill: feature-dev:feature-dev
-        args: "{{task}}"
-      - name: test
-        type: script
-        script: npm test
-      - name: build
-        type: script
-        script: npm run build
----</div>
+                        <div class="code-block"><span class="code-comment"># chainer.config.yaml in your project</span>
+
+patterns:
+  - match: ["with tests", "and test"]
+    chain: plan-implement-test
+
+  - match: ["quick fix", "hotfix"]
+    chain: implement-only
+
+  - match: ["refactor"]
+    chain: plan-only</div>
                     </div>
+                </div>
+                <div class="col-right" style="display: flex; flex-direction: column; justify-content: center;">
+                    <p style="margin-bottom: 1rem;"><strong>Now you can say:</strong></p>
+                    <div class="code-block" style="margin: 0; padding: 1rem;">/chainer Add OAuth with tests</div>
+                    <p style="margin-top: 1rem; color: var(--gray); font-size: 0.95rem;">Chainer detects "with tests" and runs your plan-implement-test chain, which adds <code>npm test</code> after implementation.</p>
+                </div>
+                <div class="col-full" style="margin-top: 2rem;">
+                    <p style="max-width: 60ch; color: var(--gray);">See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community patterns library</a> for more examples and ready-to-use workflows.</p>
                 </div>
             </div>
         </section>
@@ -508,14 +645,23 @@ chains:
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)" id="faq-simple-explanation">Can you explain this without all the jargon?</div>
                         <div class="faq-answer">
-                            <p>Chainer lets you automate sequences of actions in Claude Code instead of doing them manually one-by-one.</p>
-                            <p><strong>The simple mental model:</strong> You define a "recipe" once (called a chain), and Chainer follows it automatically. Instead of manually running feature-dev, then ralph-wiggum, then tests—you create a chain that does all three in order.</p>
+                            <p>Chainer lets you automate sequences of actions in Claude Code by just describing what you want in plain English.</p>
+                            <p><strong>The simple mental model:</strong> You tell Chainer what you want to build. Chainer figures out the steps, shows you what it'll do, and asks for confirmation. Then it runs everything automatically.</p>
                             <p><strong>How it works:</strong></p>
-                            <p>1. You define a chain in a simple config file (YAML).<br>
-                            2. You tell Chainer to run that chain.<br>
-                            3. Chainer executes each step in sequence automatically.<br>
-                            4. You come back to completed work.</p>
-                            <p><strong>Example:</strong> Instead of manually creating a worktree, running feature-dev to plan, then ralph-wiggum to implement—you just run <code>/chainer:run worktree-plan-implement</code> and all three happen automatically.</p>
+                            <p>1. You type something like <code>/chainer Add user login</code><br>
+                            2. Chainer shows you: "I'll run feature-dev to plan, then ralph-wiggum to implement"<br>
+                            3. You click Start (or Edit if you want to change something)<br>
+                            4. Chainer runs each step automatically<br>
+                            5. You come back to working code</p>
+                            <p><strong>Example:</strong> Instead of remembering commands and syntax, just say <code>/chainer build payments in a new worktree</code> and Chainer handles creating the isolated workspace, planning, and implementing.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-status">What's the status of this project?</div>
+                        <div class="faq-answer">
+                            <p><strong>Very early beta.</strong> Chainer is experimental and should be considered a proof-of-concept. Only a handful of people have tested it so far.</p>
+                            <p>Expect rough edges, breaking changes, and incomplete features. Some features shown on this site (like Answer History and interactive Start/Edit/Cancel buttons) are designed but not yet implemented.</p>
+                            <p>Use at your own risk. This notice will be updated when the project matures.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -526,40 +672,45 @@ chains:
                             <p>• <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a> - For the worktree-plan-implement chain<br>
                             • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a> - For planning chains<br>
                             • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a> - For implementation chains</p>
-                            <p>But you can create custom chains that use any plugins you want.</p>
+                            <p><strong>Missing a plugin?</strong> Chainer will detect missing dependencies and show exactly how to install them.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-create-chains">How do I create my own chains?</div>
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-supported-plugins">What plugins are supported?</div>
                         <div class="faq-answer">
-                            <p>Edit <code>~/.claude/chainer.local.md</code> and add your chain definition in YAML format. Here's a simple example:</p>
-                            <pre style="margin: 1rem 0;"><code>---
+                            <p>Chainer officially supports and is tested with:</p>
+                            <p>• <a href="https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev">feature-dev</a> - Planning and architecture<br>
+                            • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum">ralph-wiggum</a> - Autonomous implementation<br>
+                            • <a href="https://github.com/danielraffel/worktree-manager">Worktree Manager</a> - Isolated workspaces<br>
+                            • <a href="https://github.com/anthropics/claude-plugins-official/tree/main/frontend-design">frontend-design</a> - UI/UX design</p>
+                            <p>Many other plugins should work in custom chains. See <a href="https://github.com/danielraffel/Chainer/blob/main/SUPPORTED_PLUGINS.md">SUPPORTED_PLUGINS.md</a> for the full compatibility matrix and feature support details.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-create-chains">How do I create my own workflows?</div>
+                        <div class="faq-answer">
+                            <p>Add a <code>chainer.config.yaml</code> file to your project. Define patterns (words that trigger your workflow) and chains (what steps to run):</p>
+                            <pre style="margin: 1rem 0; background: var(--code-bg); color: var(--code-text); padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>patterns:
+  - match: ["with tests", "and test"]
+    chain: plan-implement-test
+
 chains:
-  my-workflow:
-    enabled: true
-    description: "Build and test"
-    inputs:
-      feature: { required: true }
+  plan-implement-test:
     steps:
-      - name: plan
-        type: skill
-        skill: feature-dev:feature-dev
-        args: "{{feature}}"
-      - name: test
-        type: script
-        script: npm test
----</code></pre>
-                            <p>Then run it with: <code>/chainer:run my-workflow --feature="Add auth"</code></p>
-                            <p>See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community chains</a> for more examples.</p>
+      - skill: feature-dev
+      - skill: ralph-wiggum
+      - script: npm test</code></pre>
+                            <p>Now when you say <code>/chainer Add OAuth with tests</code>, Chainer detects "with tests" and runs your custom workflow.</p>
+                            <p>See the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community patterns</a> for more examples.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-vs-manual">Why use chains instead of running plugins manually?</div>
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-vs-manual">Why use Chainer instead of running plugins manually?</div>
                         <div class="faq-answer">
+                            <p><strong>No syntax to remember:</strong> Just describe what you want. Chainer figures out the right plugins and order.</p>
+                            <p><strong>Transparency:</strong> See exactly what will happen before it runs. Edit or cancel if it's not what you want.</p>
                             <p><strong>Consistency:</strong> The same steps happen every time, in the same order.</p>
-                            <p><strong>Speed:</strong> One command instead of multiple manual steps.</p>
-                            <p><strong>Shareability:</strong> Teams can share chains so everyone uses the same workflow.</p>
-                            <p><strong>Automation:</strong> Run complex workflows (worktree creation + planning + implementation + testing) with a single command.</p>
+                            <p><strong>Shareability:</strong> Teams can share patterns so everyone uses the same workflows.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -588,6 +739,18 @@ chains:
                             <p><strong>If you still see excessive looping:</strong></p>
                             <p>1. Lower <code>default_max_iterations</code> in your config file (e.g., to 20) to cap wasted iterations.</p>
                             <p>2. Manually stop Claude (Ctrl+C) once you see the work is done.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)" id="faq-community-chains">How do I share my chains with the community?</div>
+                        <div class="faq-answer">
+                            <p>We'd love to see what workflows you create! To contribute a chain to the community library:</p>
+                            <p>1. Create your chain in a YAML file (e.g., <code>my-workflow.yaml</code>)<br>
+                            2. Fork the <a href="https://github.com/danielraffel/Chainer">Chainer repository</a><br>
+                            3. Add your chain to the <code>community-chains/</code> directory<br>
+                            4. Include a README explaining what it does and what plugins it requires<br>
+                            5. Submit a pull request</p>
+                            <p>Check out existing chains in the <a href="https://github.com/danielraffel/Chainer/tree/main/community-chains">community-chains library</a> for examples.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -643,6 +806,12 @@ chains:
 
         function toggleFaq(el) {
             el.parentElement.classList.toggle('open');
+        }
+
+        function toggleDetails(el) {
+            const details = el.parentElement.nextElementSibling;
+            details.classList.toggle('open');
+            el.textContent = details.classList.contains('open') ? 'Show less' : 'Learn more';
         }
 
         // Open FAQ if hash matches

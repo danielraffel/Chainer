@@ -1,18 +1,81 @@
 ---
-skill_name: run
-description: Execute a chain by name
-arguments:
-  chain_name:
-    description: Name of the chain to execute (positional)
-    required: true
-  cwd:
-    description: Working directory for chain execution
-    required: false
+description: Execute a chain by name or describe what you want in natural language
+argument-hint: "<chain-name or natural language description>"
 ---
 
 # Chainer: Run Chain
 
 Execute a configured chain by name.
+
+---
+
+## User Communication Guidelines
+
+**CRITICAL:** Keep status updates concise and user-focused. Avoid verbose explanations.
+
+### Status Line Pattern
+
+Use this format for all status updates:
+```
+⏺ <What you're doing>... <why it matters OR what it enables>
+```
+
+**Good examples:**
+- ⏺ Checking Chainer config for your Galaxian game...
+- ⏺ No chain specified. Selecting best workflow based on your request...
+- ⏺ Using defaults (no local config found).
+
+**Bad examples (avoid these):**
+- ⏺ I'll help you run the chainer command to develop a Galaxian-style game. Let me start by reading the configuration files...
+- ⏺ Now let me parse the arguments. Based on the user's request, they want to develop...
+
+### What to Show vs Hide
+
+**ALWAYS SHOW:**
+- Chain being executed
+- Critical decisions (which chain chosen, why)
+- Plugin execution (feature-dev starting, ralph-wiggum running)
+- Errors that require user action
+- Question prompts (interactive UI)
+- Final results
+
+**HIDE/SUPPRESS:**
+- Missing optional config files (just say "Using defaults")
+- Successful file reads (unless debugging)
+- Internal parsing/validation steps
+- Reasoning about obvious things
+- Tool results that worked as expected
+
+### Error Handling
+
+**For missing optional files:**
+```
+⏺ Looking for local config... none found. Using defaults.
+```
+
+**NOT:**
+```
+⏺ Read(.claude/chainer.local.md)
+  ⎿  Error reading file
+⏺ Read(~/.claude/chainer.local.md)
+  ⎿  Error reading file
+```
+
+### Decision Communication
+
+**Pattern:** Observation → Decision → Action (one line)
+
+**Good:**
+```
+⏺ No chain specified. This looks like a frontend design task—using frontend-design workflow.
+```
+
+**Bad:**
+```
+⏺ I see the issue - the user provided a detailed description but didn't specify which chain. Looking more closely, this seems like it would be better suited for frontend-design rather than plan-and-implement. Let me use frontend-design directly.
+```
+
+---
 
 ## Step 1: Parse Arguments
 
@@ -45,7 +108,7 @@ for (let i = 1; i < args.length; i++) {
 Read the chainer configuration from:
 1. `.claude/chainer.local.md` (project-specific)
 2. `~/.claude/chainer.local.md` (global)
-3. Fallback to plugin defaults
+3. Fallback to plugin defaults at `${CLAUDE_PLUGIN_ROOT}/../defaults/chainer.local.md`
 
 Use the Read tool to load and parse the YAML frontmatter.
 
@@ -329,6 +392,140 @@ Use the Bash tool to execute the script.
 - If a step fails, stop execution and report error
 - Capture outputs if specified in step configuration
 - Update state file after each step completes
+
+## Step 8.5: Smart Question Handling (After Each Step)
+
+**Only runs if `question_handling.enabled: true` in config.**
+
+After each step completes, check if the plugin asked clarifying questions:
+
+### Detect Text-Based Questions
+
+Look for patterns in the step output that indicate questions:
+- Lines starting with numbers: "1. ", "2. ", etc.
+- Lines ending with "?"
+- Headers like "Questions:", "Before I", "Please clarify:", "I need to know:"
+- Bullet points with question marks
+
+**Detection algorithm:**
+```javascript
+const questionPatterns = [
+  /^(?:\d+\.|\*|-)\s+(.+\?)/gm,           // "1. Question?" or "* Question?"
+  /^(?:Questions?|Clarifying|Before I):/im, // Question headers
+  /\n\s*(.+\?)$/gm                         // Lines ending with ?
+];
+
+let hasQuestions = false;
+for (const pattern of questionPatterns) {
+  if (pattern.test(stepOutput)) {
+    hasQuestions = true;
+    break;
+  }
+}
+```
+
+### Parse Questions
+
+If questions detected:
+
+1. **Extract question blocks:**
+   ```javascript
+   // Find question section
+   const questionSection = extractBetween(
+     stepOutput,
+     /(?:Questions?|Clarifying|Before I):/i,
+     /(?:\n\n|$)/
+   );
+   ```
+
+2. **Parse into structured format:**
+   - Identify question text (ends with ?)
+   - Extract options if provided (sub-bullets, parentheses)
+   - Detect if multiple choice or free-form
+   - Group related questions
+
+3. **Convert to AskUserQuestion format:**
+   ```javascript
+   const questions = [
+     {
+       question: "How should invaders behave?",
+       header: "Gameplay",
+       multiSelect: false,
+       options: [
+         {
+           label: "Formation with swooping attacks",
+           description: "Like classic Galaxian"
+         },
+         {
+           label: "Simple side-to-side movement",
+           description: "Like Space Invaders"
+         }
+       ]
+     }
+   ];
+   ```
+
+### Present Interactive UI
+
+Use the AskUserQuestion tool to present questions:
+
+```javascript
+AskUserQuestion({
+  questions: parsedQuestions
+});
+```
+
+**Limits:**
+- Max 4 questions per call (if more, batch into multiple calls)
+- Max 4 options per question
+- Always include "Other" option automatically for free-form
+
+### Load Answer History
+
+If `suggest_defaults: true`:
+
+1. Read `.claude/chainer-answers.json`
+2. Check for similar questions asked before
+3. Mark recommended option: "Formation (You chose this last time)"
+4. For project-type matches, suggest: "Arrow keys (Recommended for games)"
+
+### Save Answers
+
+If `save_answers: true`:
+
+After user responds, save to `.claude/chainer-answers.json`:
+```json
+{
+  "history": [
+    {
+      "timestamp": "2025-01-05T20:30:00Z",
+      "chain": "plan-and-implement",
+      "step": "plan",
+      "plugin": "feature-dev",
+      "question": "How should invaders behave?",
+      "answer": "Formation with swooping attacks",
+      "project_type": "game"
+    }
+  ]
+}
+```
+
+### Resume Plugin with Answers
+
+Format answers back to the plugin:
+```
+Based on your clarifications:
+- Invader behavior: Formation with swooping attacks
+- Starting lives: 3
+- Controls: Arrow keys and spacebar
+
+[Continue execution with this context]
+```
+
+**Important:**
+- If `batch_mode: true`, collect ALL questions before showing UI
+- If `batch_mode: false`, show questions immediately as detected
+- For plugins already using AskUserQuestion, answers flow through normally
 
 ## Step 9: Report Results and Update State
 

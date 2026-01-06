@@ -1,11 +1,12 @@
 ---
-skill_name: status
 description: Show running and completed chains
 ---
 
 # Chainer: Chain Status
 
 Display currently running chains and recently completed chains.
+
+**User Communication:** Be concise. Show status directly without "Let me check..." narration.
 
 ## Step 1: Read State File
 

@@ -2,27 +2,10 @@
   "name": "chainer",
   "version": "0.2.0",
   "description": "Universal plugin orchestration with piping - chain any Claude Code plugins together",
-  "author": "Daniel Raffel",
-  "commands": {
-    "run": {
-      "file": "commands/run.md",
-      "description": "Execute a chain by name"
-    },
-    "list": {
-      "file": "commands/list.md",
-      "description": "Show available chains"
-    },
-    "status": {
-      "file": "commands/status.md",
-      "description": "Show running chains"
-    },
-    "check-deps": {
-      "file": "commands/check-deps.md",
-      "description": "Check plugin dependencies for a chain"
-    },
-    "suggest": {
-      "file": "commands/suggest.md",
-      "description": "Get plugin and chain suggestions based on natural language"
-    }
-  }
+  "author": {
+    "name": "Daniel Raffel",
+    "url": "https://danielraffel.me"
+  },
+  "license": "MIT",
+  "commands": "./commands/"
 }

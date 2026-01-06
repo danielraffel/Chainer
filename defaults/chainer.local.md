@@ -69,6 +69,15 @@ defaults:
   spec_directory: audit
   max_iterations: 50
   auto_spawn_strategy: ask  # Options: ask, always, never
+
+  # Smart Question Handler - Makes any plugin's questions interactive
+  question_handling:
+    enabled: true
+    detect_text_questions: true    # Parse unstructured text questions into interactive UI
+    enhance_structured: true       # Enhance plugins already using AskUserQuestion
+    save_answers: true            # Remember choices in .claude/chainer-answers.json
+    suggest_defaults: true        # Suggest answers based on project type and history
+    batch_mode: false             # Collect all questions first, ask once (vs streaming)
 ---
 
 # Chainer Configuration

@@ -1,5 +1,4 @@
 ---
-skill_name: list
 description: Show available chains
 ---
 
@@ -7,12 +6,14 @@ description: Show available chains
 
 Display all enabled chains from the configuration.
 
+**User Communication:** Be concise. Don't show "Reading file..." or "Parsing...". Just show the results. If config missing, say "Using defaults" in one line.
+
 ## Step 1: Load Configuration
 
-Read the chainer configuration from:
+Read the chainer configuration from (in order of priority):
 1. `.claude/chainer.local.md` (project-specific)
 2. `~/.claude/chainer.local.md` (global)
-3. Fallback to plugin defaults at `${CLAUDE_PLUGIN_ROOT}/defaults/chainer.local.md`
+3. Fallback to plugin defaults at `${CLAUDE_PLUGIN_ROOT}/../defaults/chainer.local.md`
 
 Use the Read tool to load and parse the YAML frontmatter.
 
