@@ -35,12 +35,12 @@ In Claude Code, run:
 #### 2. Install the Plugin
 
 ```bash
-/plugin install chainer@worktree-manager-marketplace
+/plugin install chainer@generous-corp-marketplace
 ```
 
 Or use the interactive installer:
 1. Type `/plugin`
-2. Navigate to "worktree-manager-marketplace"
+2. Navigate to "generous-corp-marketplace"
 3. Select "chainer"
 4. Click "Install for you (user scope)"
 
