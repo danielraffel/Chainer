@@ -34,7 +34,7 @@ Use this format for all status updates:
 **ALWAYS SHOW:**
 - Chain being executed
 - Critical decisions (which chain chosen, why)
-- Plugin execution (feature-dev starting, ralph-wiggum running)
+- Plugin execution (feature-dev starting, ralph-loop running)
 - Errors that require user action
 - Question prompts (interactive UI)
 - Final results
@@ -218,13 +218,13 @@ Example output:
 ❌ Cannot run 'plan-and-implement' - missing required plugin(s)
 
 Missing plugins:
-  • ralph-wiggum - Autonomous implementation loops
-    Install: /plugin install ralph-wiggum@claude-plugins-official
-    Docs: https://awesomeclaude.ai/ralph-wiggum
+  • ralph-loop - Autonomous implementation loops
+    Install: /plugin install ralph-loop@claude-plugins-official
+    Docs: https://awesomeclaude.ai/ralph-loop
 
 Dependency status for 'plan-and-implement':
   ✅ feature-dev
-  ❌ ralph-wiggum
+  ❌ ralph-loop
 
 To skip this check: /chainer:run plan-and-implement --skip-deps-check --prompt="test"
 ```
@@ -549,7 +549,7 @@ Based on your clarifications:
 
    Steps executed:
      1. plan (feature-dev:feature-dev) - ✅ Complete
-     2. implement (ralph-wiggum) - ✅ Complete
+     2. implement (ralph-loop) - ✅ Complete
 
    Results:
      - Spec file: audit/oauth.md
@@ -570,10 +570,10 @@ If chain execution fails:
 ```
 ❌ Chain 'plan-and-implement' failed at step 2: implement
 
-Error: ralph-wiggum plugin not found
+Error: ralph-loop plugin not found
 
 To fix:
-  - Install ralph-wiggum plugin
+  - Install ralph-loop plugin
   - Check plugin is enabled
 ```
 

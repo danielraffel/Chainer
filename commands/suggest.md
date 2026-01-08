@@ -179,7 +179,7 @@ No direct matches found for: "{description}"
 
 Available built-in chains:
   • plan-only - Planning with feature-dev
-  • implement-only - Implementation with ralph-wiggum
+  • implement-only - Implementation with ralph-loop
   • plan-and-implement - Full development cycle
   • worktree-plan-implement - Isolated feature development
 
@@ -205,13 +205,13 @@ Suggestions for: "plan and implement a login feature"
 
 ✨ Recommended Chain:
   plan-and-implement
-  Steps: feature-dev → ralph-wiggum
+  Steps: feature-dev → ralph-loop
   Run: /chainer:run plan-and-implement --prompt "login feature"
 
 This chain uses:
   • feature-dev - Feature planning with architecture focus
     (matched: "plan")
-  • ralph-wiggum - Autonomous implementation loops
+  • ralph-loop - Autonomous implementation loops
     (matched: "implement", "feature")
 
 Need help? /chainer:list shows all chains with detailed descriptions.
@@ -244,7 +244,7 @@ Suggestions for: "create isolated workspace for testing"
 
 ✨ Recommended Chain:
   worktree-plan-implement
-  Steps: worktree-manager → feature-dev → ralph-wiggum
+  Steps: worktree-manager → feature-dev → ralph-loop
   Run: /chainer:run worktree-plan-implement --prompt "testing"
 
 This chain uses:
@@ -252,7 +252,7 @@ This chain uses:
     (matched: "workspace", "isolated")
   • feature-dev - Feature planning with architecture focus
     (matched: "plan")
-  • ralph-wiggum - Autonomous implementation loops
+  • ralph-loop - Autonomous implementation loops
     (matched: "implement")
 
 Other chains:

@@ -34,7 +34,7 @@ Dependency Check: plan-and-implement
 
 Required plugins:
   ✅ feature-dev (installed)
-  ✅ ralph-wiggum (installed)
+  ✅ ralph-loop (installed)
 
 Status: ✅ Ready to run
 ```
@@ -54,18 +54,18 @@ plan-only:
   Status: ✅ Ready
 
 implement-only:
-  ✅ ralph-wiggum (installed)
+  ✅ ralph-loop (installed)
   Status: ✅ Ready
 
 plan-and-implement:
   ✅ feature-dev (installed)
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
   Status: ❌ Cannot run (missing 1 plugin)
 
 worktree-plan-implement:
   ✅ worktree-manager (installed)
   ✅ feature-dev (installed)
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
   Status: ❌ Cannot run (missing 1 plugin)
 ```
 
@@ -205,7 +205,7 @@ Dependency Check: worktree-plan-implement
 Required plugins:
   ✅ worktree-manager (installed)
   ✅ feature-dev (installed)
-  ✅ ralph-wiggum (installed)
+  ✅ ralph-loop (installed)
 
 Status: ✅ Ready to run
 ```
@@ -217,12 +217,12 @@ Dependency Check: plan-and-implement
 
 Required plugins:
   ✅ feature-dev (installed)
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
 
 Missing plugins:
-  • ralph-wiggum - Autonomous implementation loops
-    Install: /plugin install ralph-wiggum@claude-plugins-official
-    Docs: https://awesomeclaude.ai/ralph-wiggum
+  • ralph-loop - Autonomous implementation loops
+    Install: /plugin install ralph-loop@claude-plugins-official
+    Docs: https://awesomeclaude.ai/ralph-loop
 
 Status: ❌ Cannot run (missing 1 plugin)
 ```
@@ -237,18 +237,18 @@ plan-only:
   Status: ✅ Ready
 
 implement-only:
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
   Status: ❌ Cannot run (missing 1 plugin)
 
 plan-and-implement:
   ✅ feature-dev (installed)
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
   Status: ❌ Cannot run (missing 1 plugin)
 
 worktree-plan-implement:
   ✅ worktree-manager (installed)
   ✅ feature-dev (installed)
-  ❌ ralph-wiggum (not installed)
+  ❌ ralph-loop (not installed)
   Status: ❌ Cannot run (missing 1 plugin)
 
 Summary:
@@ -256,5 +256,5 @@ Summary:
   ❌ Missing dependencies: 3 chains
 
 To install missing plugins:
-  /plugin install ralph-wiggum@claude-plugins-official
+  /plugin install ralph-loop@claude-plugins-official
 ```

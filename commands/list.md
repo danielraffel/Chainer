@@ -30,7 +30,7 @@ Available Chains:
 
 ┌─────────────────────────────────────────────────────────────┐
 │ plan-and-implement                                          │
-│ Plan with feature-dev, implement with ralph-wiggum          │
+│ Plan with feature-dev, implement with ralph-loop          │
 │                                                             │
 │ Usage:                                                      │
 │   /chainer:run plan-and-implement \                         │

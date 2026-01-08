@@ -7,7 +7,7 @@ Chainer works with a growing number of Claude Code plugins. This document maps w
 | Plugin | Smart Questions | Natural Language | Chain Support | Notes |
 |--------|----------------|------------------|---------------|-------|
 | [feature-dev](https://github.com/anthropics/claude-plugins-official/tree/main/feature-dev) | ✅ Planned | ✅ Yes | ✅ Yes | Used in plan-and-implement, plan-only chains |
-| [ralph-wiggum](https://github.com/anthropics/claude-plugins-official/tree/main/ralph-wiggum) | ✅ Planned | ✅ Yes | ✅ Yes | Used in plan-and-implement, implement-only chains |
+| [ralph-loop](https://github.com/anthropics/claude-plugins-official/tree/main/ralph-loop) | ✅ Planned | ✅ Yes | ✅ Yes | Used in plan-and-implement, implement-only chains |
 | [worktree-manager](https://github.com/danielraffel/worktree-manager) | ✅ Planned | ✅ Yes | ✅ Yes | Used in worktree-plan-implement chain |
 | [frontend-design](https://github.com/anthropics/claude-plugins-official/tree/main/frontend-design) | ✅ Planned | ✅ Yes | ⚙️ Partial | Can be used in custom chains |
 

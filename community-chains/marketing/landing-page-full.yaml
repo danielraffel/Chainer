@@ -21,7 +21,7 @@ steps:
   - name: implement
     type: script
     script: |
-      SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+      SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-loop*' 2>/dev/null | head -1)"
       bash "$SCRIPT_PATH" "Build landing page from {{design_spec}} with marketing copy" --max-iterations 30 --completion-promise DONE
   - name: optimize
     type: script
@@ -52,7 +52,7 @@ This chain creates a complete, production-ready landing page:
 ## Requirements
 
 - `frontend-design` plugin installed
-- `ralph-wiggum` plugin installed
+- `ralph-loop` plugin installed
 - Node.js and build tools configured
 
 ## Output

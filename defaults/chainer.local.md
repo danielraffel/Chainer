@@ -2,7 +2,7 @@
 chains:
   plan-and-implement:
     enabled: true
-    description: "Plan with feature-dev, implement with ralph-wiggum"
+    description: "Plan with feature-dev, implement with ralph-loop"
     inputs:
       prompt: { required: true, description: "What to build" }
       feature_name: { required: true, description: "Feature name for spec file" }
@@ -16,7 +16,7 @@ chains:
       - name: implement
         type: script
         script: |
-          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-loop*' 2>/dev/null | head -1)"
           bash "$SCRIPT_PATH" "Implement features from {{spec_file}}" --max-iterations 50 --completion-promise DONE
 
   plan-only:
@@ -40,7 +40,7 @@ chains:
       - name: implement
         type: script
         script: |
-          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-loop*' 2>/dev/null | head -1)"
           bash "$SCRIPT_PATH" "Implement features from {{spec_file}}" --max-iterations 50 --completion-promise DONE
 
   worktree-plan-implement:
@@ -62,7 +62,7 @@ chains:
       - name: implement
         type: script
         script: |
-          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+          SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-loop*' 2>/dev/null | head -1)"
           bash "$SCRIPT_PATH" "Implement features from audit/{{feature_name}}.md" --max-iterations 50 --completion-promise DONE
 
 defaults:

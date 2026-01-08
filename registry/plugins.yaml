@@ -31,10 +31,10 @@ plugins:
       - document
       - blueprint
 
-  ralph-wiggum:
+  ralph-loop:
     marketplace: claude-plugins-official
     description: "Autonomous implementation loops"
-    docs: "https://awesomeclaude.ai/ralph-wiggum"
+    docs: "https://awesomeclaude.ai/ralph-loop"
     keywords:
       - implement
       - implementation
@@ -179,10 +179,10 @@ chains:
     requires: [feature-dev]
 
   implement-only:
-    requires: [ralph-wiggum]
+    requires: [ralph-loop]
 
   plan-and-implement:
-    requires: [feature-dev, ralph-wiggum]
+    requires: [feature-dev, ralph-loop]
 
   worktree-plan-implement:
-    requires: [worktree-manager, feature-dev, ralph-wiggum]
+    requires: [worktree-manager, feature-dev, ralph-loop]

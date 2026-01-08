@@ -24,15 +24,38 @@ Chainer lets you combine multiple Claude Code plugins into automated workflows c
 
 ### Installation
 
+#### 1. Add the Marketplace
+
+In Claude Code, run:
+
 ```bash
-# Clone the repository
-git clone https://github.com/danielraffel/Chainer ~/Chainer
+/plugin marketplace add danielraffel/worktree-manager
+```
 
-# Load the plugin
-claude --plugin-dir ~/Chainer/plugin
+#### 2. Install the Plugin
 
-# (Optional) Copy default configuration
-cp ~/Chainer/defaults/chainer.local.md ~/.claude/chainer.local.md
+```bash
+/plugin install chainer@worktree-manager-marketplace
+```
+
+Or use the interactive installer:
+1. Type `/plugin`
+2. Navigate to "worktree-manager-marketplace"
+3. Select "chainer"
+4. Click "Install for you (user scope)"
+
+#### 3. Restart Claude Code
+
+Quit and reopen Claude Code to load the plugin.
+
+#### 4. Verify Installation
+
+```bash
+/plugin list
+# Should show chainer
+
+/chainer:list
+# Test a command
 ```
 
 ### Basic Usage
@@ -61,7 +84,7 @@ cp ~/Chainer/defaults/chainer.local.md ~/.claude/chainer.local.md
 ### `plan-and-implement`
 Complete feature development workflow:
 1. Plan with `feature-dev:feature-dev`
-2. Implement with `ralph-wiggum` loop
+2. Implement with `ralph-loop` loop
 
 ```bash
 /chainer:run plan-and-implement \
@@ -90,7 +113,7 @@ Implement from an existing spec:
 Full workflow with worktree creation (requires worktree-manager):
 1. Create isolated worktree
 2. Plan with `feature-dev`
-3. Implement with `ralph-wiggum`
+3. Implement with `ralph-loop`
 
 ```bash
 /chainer:run worktree-plan-implement \
@@ -140,13 +163,13 @@ Chainer automatically checks for missing plugins **before** running a chain:
 ❌ Cannot run 'plan-and-implement' - missing required plugin(s)
 
 Missing plugins:
-  • ralph-wiggum - Autonomous implementation loops
-    Install: /plugin install ralph-wiggum@claude-plugins-official
-    Docs: https://awesomeclaude.ai/ralph-wiggum
+  • ralph-loop - Autonomous implementation loops
+    Install: /plugin install ralph-loop@claude-plugins-official
+    Docs: https://awesomeclaude.ai/ralph-loop
 
 Dependency status for 'plan-and-implement':
   ✅ feature-dev
-  ❌ ralph-wiggum
+  ❌ ralph-loop
 
 To skip this check: /chainer:run plan-and-implement --skip-deps-check ...
 ```
@@ -253,7 +276,7 @@ Chainer uses `feature-dev` for planning by default:
 
 ### With Ralph Wiggum
 
-Chainer uses `ralph-wiggum` for implementation loops:
+Chainer uses `ralph-loop` for implementation loops:
 
 ```bash
 /chainer:run implement-only --spec_file="audit/api.md"
@@ -329,7 +352,7 @@ Import → From URL → https://raw.githubusercontent.com/user/repo/main/chain.y
 This will:
 1. Plan the feature with `feature-dev`
 2. Save spec to `audit/auth.md`
-3. Implement with `ralph-wiggum` loop
+3. Implement with `ralph-loop` loop
 4. Iterate until complete
 
 ### Quick Implementation

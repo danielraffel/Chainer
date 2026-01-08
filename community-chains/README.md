@@ -37,8 +37,8 @@ Copy the chain definition from any `.yaml` file and paste it into your `~/.claud
 
 | Chain | Description | Requirements |
 |-------|-------------|--------------|
-| `design-and-build` | Design UI with frontend-design, implement with ralph | frontend-design, ralph-wiggum |
-| `tdd-feature` | Test-driven development workflow | feature-dev, ralph-wiggum |
+| `design-and-build` | Design UI with frontend-design, implement with ralph | frontend-design, ralph-loop |
+| `tdd-feature` | Test-driven development workflow | feature-dev, ralph-loop |
 
 ### Content
 
@@ -50,7 +50,7 @@ Copy the chain definition from any `.yaml` file and paste it into your `~/.claud
 
 | Chain | Description | Requirements |
 |-------|-------------|--------------|
-| `landing-page-full` | Complete landing page workflow | frontend-design, ralph-wiggum |
+| `landing-page-full` | Complete landing page workflow | frontend-design, ralph-loop |
 
 ## Contributing Chains
 

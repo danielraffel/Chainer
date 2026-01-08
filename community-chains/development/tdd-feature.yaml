@@ -1,7 +1,7 @@
 ---
 name: tdd-feature
 enabled: true
-description: "Plan feature with tests first, then implement with ralph-wiggum"
+description: "Plan feature with tests first, then implement with ralph-loop"
 inputs:
   prompt: { required: true, description: "Feature to build with TDD approach" }
   feature_name: { required: true, description: "Feature name for spec file" }
@@ -20,7 +20,7 @@ steps:
   - name: implement
     type: script
     script: |
-      SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-wiggum*' 2>/dev/null | head -1)"
+      SCRIPT_PATH="$(find ~/.claude/plugins -name 'setup-ralph-loop.sh' -path '*ralph-loop*' 2>/dev/null | head -1)"
       bash "$SCRIPT_PATH" "Implement features from {{spec_file}} using TDD - write failing tests first, then make them pass" --max-iterations 50 --completion-promise DONE
 ---
 
@@ -43,7 +43,7 @@ This chain enforces TDD methodology:
 ## Requirements
 
 - `feature-dev` plugin installed
-- `ralph-wiggum` plugin installed
+- `ralph-loop` plugin installed
 - Test framework configured in project
 
 ## TDD Workflow
