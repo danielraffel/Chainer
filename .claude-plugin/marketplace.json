@@ -18,7 +18,7 @@
         "name": "Daniel Raffel"
       },
       "homepage": "https://www.generouscorp.com/Chainer/",
-      "repository": "https://github.com/danielraffel/Chainer",
+      "repository": "https://github.com/danielraffel/chainer",
       "license": "MIT",
       "keywords": ["orchestration", "workflow", "automation", "plugin-orchestration"]
     }
